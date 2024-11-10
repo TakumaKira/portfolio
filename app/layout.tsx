@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import StyledComponentsRegistry from './lib/registry'
 
 export const metadata: Metadata = {
   title: "Takuma's portfolio",
@@ -12,7 +13,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
+        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
       </body>
     </html>
   );
