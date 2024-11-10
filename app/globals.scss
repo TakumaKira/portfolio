@@ -1,0 +1,24 @@
+:root {
+  --color-surface-primary-light: #F0F0E3;
+  --color-surface-primary-dark: #38343F;
+}
+
+html,
+body {
+  min-width: 100vw;
+  min-height: 100vh;
+}
+
+body {
+  background: var(--color-surface-primary-light);
+  @media (prefers-color-scheme: dark) {
+    background: var(--color-surface-primary-dark);
+  }
+  font-family: serif;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}

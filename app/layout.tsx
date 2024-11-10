@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import StyledComponentsRegistry from './lib/registry'
 import localFont from "next/font/local";
+import "./globals.scss";
 
 const permanentMarker = localFont({
   src: "./fonts/PermanentMarker-Regular.ttf",
