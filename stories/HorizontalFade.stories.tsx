@@ -1,140 +1,109 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
-import styled from 'styled-components';
-import localFont from "next/font/local";
+import styled, { ThemeProvider } from 'styled-components';
 
+import { type ColorScheme, type ProjectTheme, projectTheme } from '../app/theme';
+import fonts from '../app/fonts';
 import HorizontalFade from './HorizontalFade';
 
-const permanentMarker = localFont({
-  src: "../app/fonts/PermanentMarker-Regular.ttf",
-  variable: "--font-permanent-marker",
-  weight: "400",
-});
-const Content = styled.div<{ $isDark?: boolean }>`
-  width: 680px;
-  padding: 6px 0;
-  border-bottom: 1px solid ${({ $isDark }) => $isDark ? '#61615F' : '#ADABA1'};
+const Background = styled.div<{ $colorScheme: ColorScheme }>`
+  min-width: 100vw;
+  min-height: 100vh;
+  background-color: ${({ $colorScheme, theme }) => (theme as ProjectTheme).colors.surfacePrimary[$colorScheme]};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+const Content = styled.div<{ $colorScheme: ColorScheme }>`
+  width: 42.5rem;
+  padding: 0.375rem 0;
+  border-bottom: 1px solid ${({ $colorScheme, theme }) => (theme as ProjectTheme).colors.borderPrimary[$colorScheme]};
   text-align: center;
-`;
-const Text = styled.span<{ $isDark?: boolean }>`
-  font-family: var(--font-permanent-marker);
-  font-size: 64px;
+`
+const Text = styled.span<{ $colorScheme: ColorScheme }>`
+  font-family: var(${({ theme }) => (theme as ProjectTheme).fonts.main});
+  font-size: 4rem;
   line-height: 1;
-  color: ${({ $isDark }) => $isDark ? '#CCCDBC' : '#494A43'};
-`;
+  color: ${({ $colorScheme, theme }) => (theme as ProjectTheme).colors.typePrimary[$colorScheme]};
+`
 
-type HorizontalFadePropsAndCustomArgs = React.ComponentProps<typeof HorizontalFade> & { text?: string, isDark?: boolean };
-
+type HorizontalFadePropsAndCustomArgs = React.ComponentProps<typeof HorizontalFade> & { text?: string, colorScheme: ColorScheme };
 const meta: Meta<HorizontalFadePropsAndCustomArgs> = {
   title: 'Component/HorizontalFade',
   parameters: {
-    layout: 'centered',
+    layout: 'fullscreen',
   },
   tags: ['autodocs'],
   component: HorizontalFade,
-  render: ({ text, isDark, ...args }) => (
-    <Content className={`${permanentMarker.variable}`} $isDark={isDark}>
-      <HorizontalFade {...args}>
-        <Text $isDark={isDark}>{text}</Text>
-      </HorizontalFade>
-    </Content>
+  render: ({ text, colorScheme, ...args }) => (
+    <ThemeProvider theme={projectTheme}>
+      <Background $colorScheme={colorScheme}>
+        <Content className={`${fonts.permanentMarker.variable}`} $colorScheme={colorScheme}>
+          <HorizontalFade {...args}>
+            <Text $colorScheme={colorScheme}>{text}</Text>
+          </HorizontalFade>
+        </Content>
+      </Background>
+    </ThemeProvider>
   ),
-  argTypes: {},
-  args: { onChangeState: fn() },
+  argTypes: {
+    colorScheme: {
+      control: 'select',
+      options: ['light', 'dark'],
+    },
+  },
+  args: {
+    onChangeState: fn(),
+  },
 } satisfies Meta<HorizontalFadePropsAndCustomArgs>;
 export default meta;
 
 type Story = StoryObj<typeof meta>;
-
 export const FrontendOriented: Story = {
   args: {
     text: 'Frontend-Oriented',
     isVisible: true,
+    colorScheme: 'light',
   },
   parameters: {
     backgrounds: {
-      default: 'light',
+      default: 'Light',
     },
   },
-};
+}
 export const ComponentDriven: Story = {
   args: {
     text: 'Component-Driven',
     isVisible: true,
+    colorScheme: 'light',
   },
   parameters: {
     backgrounds: {
-      default: 'light',
+      default: 'Light',
     },
   },
-};
+}
 export const ArchitectureAware: Story = {
   args: {
     text: 'Architecture-Aware',
     isVisible: true,
+    colorScheme: 'light',
   },
   parameters: {
     backgrounds: {
-      default: 'light',
+      default: 'Light',
     },
   },
-};
+}
 export const DesignAware: Story = {
   args: {
     text: 'Design-Aware',
     isVisible: true,
+    colorScheme: 'light',
   },
   parameters: {
     backgrounds: {
-      default: 'light',
+      default: 'Light',
     },
   },
-};
-export const FrontendOrientedDark: Story = {
-  args: {
-    text: 'Frontend-Oriented',
-    isVisible: true,
-    isDark: true,
-  },
-  parameters: {
-    backgrounds: {
-      default: 'dark',
-    },
-  },
-};
-export const ComponentDrivenDark: Story = {
-  args: {
-    text: 'Component-Driven',
-    isVisible: true,
-    isDark: true,
-  },
-  parameters: {
-    backgrounds: {
-      default: 'dark',
-    },
-  },
-};
-export const ArchitectureAwareDark: Story = {
-  args: {
-    text: 'Architecture-Aware',
-    isVisible: true,
-    isDark: true,
-  },
-  parameters: {
-    backgrounds: {
-      default: 'dark',
-    },
-  },
-};
-export const DesignAwareDark: Story = {
-  args: {
-    text: 'Design-Aware',
-    isVisible: true,
-    isDark: true,
-  },
-  parameters: {
-    backgrounds: {
-      default: 'dark',
-    },
-  },
-};
+}
