@@ -1,7 +1,30 @@
 import type { Preview } from "@storybook/react";
 
-import './storybook-globals.css';
-import '../app/globals.css';
+import './storybook-body-style.scss';
+
+const projectViewports = {
+  desktop: {
+    name: 'Desktop',
+    styles: {
+      width: '1280px',
+      height: '832px',
+    },
+  },
+  tablet: {
+    name: 'Tablet',
+    styles: {
+      width: '834px',
+      height: '1194px',
+    },
+  },
+  mobile: {
+    name: 'Mobile',
+    styles: {
+      width: '390px',
+      height: '844px',
+    },
+  },
+};
 
 const preview: Preview = {
   parameters: {
@@ -18,6 +41,11 @@ const preview: Preview = {
         { name: 'Dark', value: '#38343F' },
       ],
     },
+    viewport: {
+      viewports: {
+        ...projectViewports,
+      },
+    },    
   },
 };
 

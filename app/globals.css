@@ -1,8 +1,0 @@
-:root {
-  --color-surface-primary-light: #F0F0E3;
-  --color-surface-primary-dark: #38343F;
-}
-
-* {
-  transition: background 0.2s, color 0.2s ease-in-out, background-color 0.2s ease-in-out;
-}

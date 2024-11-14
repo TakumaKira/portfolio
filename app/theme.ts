@@ -15,8 +15,12 @@ export const projectTheme = {
       dark: '#61615F',
     },
   },
+  // fonts are available as css variables in the global scope, using `next/font/local`
   fonts: {
     main: '--font-permanent-marker',
+  },
+  breakPoints: {
+    maxWidthMobile: '390px',
   },
 } as const
 export type ProjectTheme = typeof projectTheme;

@@ -2,9 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
 import styled, { ThemeProvider } from 'styled-components';
 
-import { type ColorScheme, type ProjectTheme, projectTheme } from '../app/theme';
-import fonts from '../app/fonts';
 import HorizontalFade from './HorizontalFade';
+
+import { type ColorScheme, type ProjectTheme, projectTheme } from '@/app/theme';
+import fonts from '@/app/fonts';
+import GlobalStyle from '@/app/GlobalStyle';
 
 const Background = styled.div<{ $colorScheme: ColorScheme }>`
   min-width: 100vw;
@@ -23,6 +25,9 @@ const Content = styled.div<{ $colorScheme: ColorScheme }>`
 const Text = styled.span<{ $colorScheme: ColorScheme }>`
   font-family: var(${({ theme }) => (theme as ProjectTheme).fonts.main});
   font-size: 4rem;
+  @media screen and (max-width: ${({ theme }) => (theme as ProjectTheme).breakPoints.maxWidthMobile}) {
+    font-size: 3rem;
+  }
   line-height: 1;
   color: ${({ $colorScheme, theme }) => (theme as ProjectTheme).colors.typePrimary[$colorScheme]};
 `
@@ -44,6 +49,7 @@ const meta: Meta<HorizontalFadePropsAndCustomArgs> = {
           </HorizontalFade>
         </Content>
       </Background>
+      <GlobalStyle />
     </ThemeProvider>
   ),
   argTypes: {

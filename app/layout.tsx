@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import StyledComponentsRegistry from './lib/registry'
 import fonts from './fonts'
-import "./app-globals.scss";
-import "./globals.css";
+
+const fontClasses = Object.values(fonts).map(({ variable }) => variable).join(' ');
 
 export const metadata: Metadata = {
   title: "Takuma's portfolio",
@@ -15,8 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${fonts.permanentMarker.variable} ${fonts.caveat.variable} ${fonts.ptSerifRegular.variable} ${fonts.ptSerifBold.variable} ${fonts.ptSerifItalic.variable} ${fonts.ptSerifBoldItalic.variable}`}>
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+      <body className={fontClasses}>
+        <StyledComponentsRegistry>
+          {children}
+        </StyledComponentsRegistry>
       </body>
     </html>
   );
