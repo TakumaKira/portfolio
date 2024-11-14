@@ -5,7 +5,7 @@ import { useServerInsertedHTML } from 'next/navigation'
 import { ServerStyleSheet, StyleSheetManager, ThemeProvider } from 'styled-components'
 import { projectTheme } from '../theme'
 import useColorScheme from '../hooks/useColorScheme'
-import ColorSchemeToggleProvider from '../contexts/ColorSchemeToggle'
+import ColorSchemeControlProvider from '../contexts/ColorSchemeControl'
 import AppBodyStyle from "../AppBodyStyle";
 import GlobalStyle from '../GlobalStyle'
 
@@ -30,20 +30,20 @@ export default function StyledComponentsRegistry({
     ? (
       <StyleSheetManager sheet={styledComponentsStyleSheet.instance}>
         <ThemeProvider theme={projectTheme}>
-          <ColorSchemeToggleProvider toggleColorScheme={toggleColorScheme}>
+          <ColorSchemeControlProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
             {children}
             <AppBodyStyle $colorScheme={colorScheme} />
-          </ColorSchemeToggleProvider>
+          </ColorSchemeControlProvider>
         </ThemeProvider>
       </StyleSheetManager>
     )
     : (
       <ThemeProvider theme={projectTheme}>
-        <ColorSchemeToggleProvider toggleColorScheme={toggleColorScheme}>
+        <ColorSchemeControlProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
           {children}
           <AppBodyStyle $colorScheme={colorScheme} />
           <GlobalStyle />
-        </ColorSchemeToggleProvider>
+        </ColorSchemeControlProvider>
       </ThemeProvider>
     )
 }
