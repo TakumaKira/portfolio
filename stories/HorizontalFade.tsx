@@ -9,31 +9,31 @@ export enum FadeState {
 }
 
 const FadingBox = styled.div<{ $fadeDuration: number }>`
-  &.fade-in {
-    mask: linear-gradient(90deg, #000 25%, #0000 75%) content-box 0% 0%/400% 100% no-repeat;
-    animation: fade-in ${props => props.$fadeDuration / 1000}s;
+&.fade-in {
+  mask: linear-gradient(90deg, #000 25%, #0000 75%) content-box 0% 0%/400% 100% no-repeat;
+  animation: fade-in ${props => props.$fadeDuration / 1000}s;
+}
+&.fade-out {
+  mask: linear-gradient(#000 0 0), linear-gradient(270deg, #0000 25%, #000 75%) content-box 0% 0%/400% 100% no-repeat;
+  mask-composite: exclude;
+  animation: fade-out ${props => props.$fadeDuration / 1000}s;
+}
+@keyframes fade-in {
+  from {
+    mask-position: 400% 0%;
   }
-  &.fade-out {
-    mask: linear-gradient(#000 0 0), linear-gradient(270deg, #0000 25%, #000 75%) content-box 0% 0%/400% 100% no-repeat;
-    mask-composite: exclude;
-    animation: fade-out ${props => props.$fadeDuration / 1000}s;
+  to {
+    mask-position: 0% 0%;
   }
-  @keyframes fade-in {
-    from {
-      mask-position: 400% 0%;
-    }
-    to {
-      mask-position: 0% 0%;
-    }
+}
+@keyframes fade-out {
+  from {
+    mask-position: 400% 0%;
   }
-  @keyframes fade-out {
-    from {
-      mask-position: 400% 0%;
-    }
-    to {
-      mask-position: 0% 0%;
-    }
+  to {
+    mask-position: 0% 0%;
   }
+}
 `;
 
 export default function HorizontalFade({
