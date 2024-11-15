@@ -13,7 +13,7 @@ font-family: var(${({ theme }) => (theme as ProjectTheme).fonts.main});
 const Text = styled.span<{ $colorScheme: ColorScheme }>`
 font-family: var(${({ theme }) => (theme as ProjectTheme).fonts.main});
 font-size: 4rem;
-@media screen and (max-width: ${({ theme }) => (theme as ProjectTheme).breakPoints.maxWidthMobile}) {
+@media screen and (max-width: ${({ theme }) => (theme as ProjectTheme).breakPoints.maxWidthMobile}px) {
   font-size: 3rem;
 }
 line-height: 1;
