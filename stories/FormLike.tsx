@@ -1,21 +1,24 @@
 import styled from "styled-components";
 import { type ColorScheme, type ProjectTheme } from "@/app/theme";
 import HorizontalFade, { FadeState } from "./HorizontalFade";
+import constants from "@/app/constants";
+
+const { ROOT_FONT_SIZE_DEFAULT, ROOT_FONT_SIZE_MOBILE } = constants
 
 const Form = styled.div<{ $colorScheme: ColorScheme, $size: 'large' | 'small', $align: 'center' | 'left', $minWidth?: string }>`
-min-width: ${({ $size }) => $size === 'small' ? 13.25 : 42.5}rem;
+min-width: ${({ $size }) => $size === 'small' ? 212 / ROOT_FONT_SIZE_DEFAULT : 680 / ROOT_FONT_SIZE_DEFAULT}rem;
 @media screen and (max-width: ${({ theme }) => (theme as ProjectTheme).breakPoints.maxWidthMobile}) {
-  min-width: ${({ $size }) => $size === 'small' ? 167 / 12 : 42.5}rem;
+  min-width: ${({ $size }) => $size === 'small' ? 167 / ROOT_FONT_SIZE_MOBILE : 372 / ROOT_FONT_SIZE_MOBILE}rem;
 }
 text-align: ${({ $align }) => $align};
-padding-left: ${({ $align }) => $align === 'left' ? 0.5 : 0}rem;
-padding-right: ${({ $align }) => $align === 'left' ? 0.5 : 0}rem;
+padding-left: ${({ $align }) => $align === 'left' ? 8 / ROOT_FONT_SIZE_DEFAULT : 0}rem;
+padding-right: ${({ $align }) => $align === 'left' ? 8 / ROOT_FONT_SIZE_DEFAULT : 0}rem;
 @media screen and (max-width: ${({ theme }) => (theme as ProjectTheme).breakPoints.maxWidthMobile}) {
-  padding-left: ${({ $align }) => $align === 'left' ? 8 / 12 : 0}rem;
-  padding-right: ${({ $align }) => $align === 'left' ? 8 / 12 : 0}rem;
+  padding-left: ${({ $align }) => $align === 'left' ? 8 / ROOT_FONT_SIZE_MOBILE : 0}rem;
+  padding-right: ${({ $align }) => $align === 'left' ? 8 / ROOT_FONT_SIZE_MOBILE : 0}rem;
 }
-padding-top: ${({ $size }) => $size === 'small' ? 0 : 0.375}rem;
-padding-bottom: ${({ $size }) => $size === 'small' ? 0 : 0.375}rem;
+padding-top: ${({ $size }) => $size === 'small' ? 0 : 6 / ROOT_FONT_SIZE_DEFAULT}rem;
+padding-bottom: ${({ $size }) => $size === 'small' ? 0 : 6 / ROOT_FONT_SIZE_DEFAULT}rem;
 border-bottom: 1px solid ${({ $colorScheme, theme }) => (theme as ProjectTheme).colors.borderPrimary[$colorScheme]};
 `
 const Text = styled.span<{ $colorScheme: ColorScheme, $size: 'large' | 'small' }>`
