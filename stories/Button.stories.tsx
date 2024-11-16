@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
 import styled, { ThemeProvider } from 'styled-components';
+import Image from "next/image";
 
 import Button from './Button';
 
@@ -8,6 +9,7 @@ import { type ColorScheme, type ProjectTheme, projectTheme } from '@/app/theme';
 import GlobalStyle from '@/app/GlobalStyle';
 import fonts from '@/app/fonts';
 import { GithubSVG, StorybookDefaultSVG, StorybookInverseSVG } from '@/app/svg';
+import CertibleBadgePNG from '@/app/img/Certible_Badge.png'
 
 const Background = styled.div<{ $colorScheme: ColorScheme }>`
   min-width: 100vw;
@@ -51,6 +53,23 @@ function ButtonContentComponentDriven({ colorScheme }: { colorScheme: ColorSchem
     <ButtonContentWrapper>
       <span>Check</span>
       {colorScheme === 'light' ? <StorybookInverseIcon /> : <StorybookDefaultIcon />}
+    </ButtonContentWrapper>
+  )
+}
+const StyledCPSAIcon = styled(Image)<{ $colorScheme: ColorScheme }>`
+  filter: grayscale(100%) brightness(${({ $colorScheme }) => $colorScheme === 'light' ? 1 : 0.75});
+  opacity: 0.5;
+`
+function CPSAIcon({ colorScheme }: { colorScheme: ColorScheme }) {
+  return (
+    <StyledCPSAIcon $colorScheme={colorScheme} src={CertibleBadgePNG} alt="CPSA" width={32} height={32} />
+  )
+}
+function ButtonContentArchitectureAware({ colorScheme }: { colorScheme: ColorScheme }) {
+  return (
+    <ButtonContentWrapper>
+      <CPSAIcon colorScheme={colorScheme} />
+      <span>Check my certification</span>
     </ButtonContentWrapper>
   )
 }
@@ -110,21 +129,17 @@ export const ComponentDriven: Story = {
     },
   },
 }
-// export const ArchitectureAware: Story = {
-//   args: {
-//     children: (
-//       <div>
-//         <span>Check my certification</span>
-//       </div>
-//     ),
-//     colorScheme: 'light',
-//   },
-//   parameters: {
-//     backgrounds: {
-//       default: 'Light',
-//     },
-//   },
-// }
+export const ArchitectureAware: Story = {
+  args: {
+    Content: ButtonContentArchitectureAware,
+    colorScheme: 'light',
+  },
+  parameters: {
+    backgrounds: {
+      default: 'Light',
+    },
+  },
+}
 // export const DesignAware: Story = {
 //   args: {
 //     children: (
