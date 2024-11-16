@@ -7,6 +7,7 @@ import Button from './Button';
 import { type ColorScheme, type ProjectTheme, projectTheme } from '@/app/theme';
 import GlobalStyle from '@/app/GlobalStyle';
 import fonts from '@/app/fonts';
+import { GithubSVG } from '@/app/svg';
 
 const Background = styled.div<{ $colorScheme: ColorScheme }>`
   min-width: 100vw;
@@ -15,6 +16,11 @@ const Background = styled.div<{ $colorScheme: ColorScheme }>`
   display: flex;
   justify-content: center;
   align-items: center;
+`
+const GithubIcon = styled(GithubSVG)`
+  path {
+    fill: red;
+  }
 `
 
 type ButtonPropsAndCustomArgs = React.ComponentProps<typeof Button>;
@@ -50,6 +56,7 @@ export const FrontendOriented: Story = {
   args: {
     children: (
       <div>
+        <GithubIcon />
         <span>Check my code</span>
       </div>
     ),

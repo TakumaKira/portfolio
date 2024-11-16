@@ -4,6 +4,7 @@ import React from "react";
 import styled from "styled-components";
 import { useColorSchemeControl } from "./contexts/ColorSchemeControl";
 import { type ColorScheme, type ProjectTheme } from "./theme";
+import { GithubSVG } from "./svg";
 
 const Button = styled.button`
   border: none;
@@ -20,6 +21,12 @@ const Text = styled.span<{ $colorScheme: ColorScheme }>`
   color: ${({ $colorScheme, theme }) => (theme as ProjectTheme).colors.typePrimary[$colorScheme]};
 `
 
+const GithubIcon = styled(GithubSVG)`
+  path {
+    fill: red;
+  }
+`
+
 export default function Home() {
   const { colorScheme, toggleColorScheme } = useColorSchemeControl()
 
@@ -31,6 +38,7 @@ export default function Home() {
   if (!isClient) return null
   return (
     <Button onClick={toggleColorScheme}>
+      <GithubIcon />
       <Text $colorScheme={colorScheme}>Toggle Color Scheme</Text>
     </Button>
   );
