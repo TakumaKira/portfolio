@@ -8,7 +8,7 @@ import Button from './Button';
 import { type ColorScheme, type ProjectTheme, projectTheme } from '@/app/theme';
 import GlobalStyle from '@/app/GlobalStyle';
 import fonts from '@/app/fonts';
-import { GithubSVG, StorybookDefaultSVG, StorybookInverseSVG } from '@/app/svg';
+import { GithubSVG, StorybookDefaultSVG, StorybookInverseSVG, FigmaSVG } from '@/app/svg';
 import CertibleBadgePNG from '@/app/img/Certible_Badge.png'
 
 const Background = styled.div<{ $colorScheme: ColorScheme }>`
@@ -70,6 +70,21 @@ function ButtonContentArchitectureAware({ colorScheme }: { colorScheme: ColorSch
     <ButtonContentWrapper>
       <CPSAIcon colorScheme={colorScheme} />
       <span>Check my certification</span>
+    </ButtonContentWrapper>
+  )
+}
+const FigmaIcon = styled(FigmaSVG)<{ $colorScheme: ColorScheme }>`
+  height: 2rem;
+  width: 5.75rem;
+  path {
+    fill: ${({ $colorScheme, theme }) => (theme as ProjectTheme).colors.typeInverse[$colorScheme]};
+  }
+`
+function ButtonContentDesignAware({ colorScheme }: { colorScheme: ColorScheme }) {
+  return (
+    <ButtonContentWrapper>
+      <span>Check</span>
+      <FigmaIcon $colorScheme={colorScheme} />
     </ButtonContentWrapper>
   )
 }
@@ -140,18 +155,14 @@ export const ArchitectureAware: Story = {
     },
   },
 }
-// export const DesignAware: Story = {
-//   args: {
-//     children: (
-//       <div>
-//         <span>Check</span>
-//       </div>
-//     ),
-//     colorScheme: 'light',
-//   },
-//   parameters: {
-//     backgrounds: {
-//       default: 'Light',
-//     },
-//   },
-// }
+export const DesignAware: Story = {
+  args: {
+    Content: ButtonContentDesignAware,
+    colorScheme: 'light',
+  },
+  parameters: {
+    backgrounds: {
+      default: 'Light',
+    },
+  },
+}
