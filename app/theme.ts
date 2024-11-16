@@ -10,6 +10,10 @@ export const projectTheme = {
       light: '#494A43',
       dark: '#CCCDBC',
     },
+    typeSecondary: {
+      light: '#848171',
+      dark: '#9F9D92',
+    },
     borderPrimary: {
       light: '#ADABA1',
       dark: '#61615F',
@@ -19,6 +23,7 @@ export const projectTheme = {
   // fonts are available as css variables in the global scope, using `next/font/local`
   fonts: {
     main: '--font-permanent-marker',
+    sub: '--font-caveat',
   },
   rootFontSize: {
     /** px */

@@ -6,9 +6,25 @@ const permanentMarker = localFont({
   weight: "400",
 });
 const caveat = localFont({
-  src: "./fonts/Caveat-VariableFont_wght.ttf",
+  src: [
+    {
+      path: "./fonts/Caveat-VariableFont_wght.ttf",
+      weight: "400",
+    },
+    {
+      path: "./fonts/Caveat-VariableFont_wght.ttf",
+      weight: "500",
+    },
+    {
+      path: "./fonts/Caveat-VariableFont_wght.ttf",
+      weight: "600",
+    },
+    {
+      path: "./fonts/Caveat-VariableFont_wght.ttf",
+      weight: "700",
+    },
+  ],
   variable: "--font-caveat",
-  weight: "400 500 600 700",
 });
 const ptSerifRegular = localFont({
   src: "./fonts/PTSerif-Regular.ttf",
