@@ -16,6 +16,17 @@ const Background = styled.div<{ $colorScheme: ColorScheme }>`
   justify-content: center;
   align-items: center;
 `
+const CenterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+const DummyButton = styled.button`
+  background-color: red;
+  border: none;
+  height: 3.25rem;
+  margin-top: 1.5rem;
+`
 
 type MainMessagePropsAndCustomArgs = React.ComponentProps<typeof MainMessage>;
 const meta: Meta<MainMessagePropsAndCustomArgs> = {
@@ -28,7 +39,10 @@ const meta: Meta<MainMessagePropsAndCustomArgs> = {
   render: ({ ...args }) => (
     <ThemeProvider theme={projectTheme}>
       <Background $colorScheme={args.colorScheme} className={`${fonts.permanentMarker.variable} ${fonts.caveat.variable}`}>
-        <MainMessage {...args} />
+        <CenterContainer>
+          <MainMessage {...args} />
+          <DummyButton>Dummy Button</DummyButton>
+        </CenterContainer>
       </Background>
       <GlobalStyle />
     </ThemeProvider>
