@@ -19,7 +19,7 @@ export default function Button({
 }: {
   children: React.ReactNode,
   colorScheme: ColorScheme,
-  onClick: () => void,
+  onClick?: () => void,
 }) {
   return (
     <StyledButton $colorScheme={colorScheme} onClick={onClick}>

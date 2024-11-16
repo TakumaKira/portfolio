@@ -7,6 +7,9 @@ import MainMessage from './MainMessage';
 import { type ColorScheme, type ProjectTheme, projectTheme } from '@/app/theme';
 import GlobalStyle from '@/app/GlobalStyle';
 import fonts from '@/app/fonts';
+import Button from './Button';
+import { ButtonContentArchitectureAware, ButtonContentComponentDriven, ButtonContentDesignAware, ButtonContentFrontendOriented } from './ButtonContent';
+import HorizontalFade from './HorizontalFade';
 
 const Background = styled.div<{ $colorScheme: ColorScheme }>`
   min-width: 100vw;
@@ -20,15 +23,12 @@ const CenterContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`
-const DummyButton = styled.button`
-  background-color: red;
-  border: none;
-  height: 3.25rem;
-  margin-top: 1.5rem;
+  gap: 1.5rem;
 `
 
-type MainMessagePropsAndCustomArgs = React.ComponentProps<typeof MainMessage>;
+type MainMessagePropsAndCustomArgs = React.ComponentProps<typeof MainMessage> & {
+  ButtonContent: React.ComponentType<{ colorScheme: ColorScheme }>
+};
 const meta: Meta<MainMessagePropsAndCustomArgs> = {
   title: 'Component/MainMessage',
   parameters: {
@@ -36,12 +36,16 @@ const meta: Meta<MainMessagePropsAndCustomArgs> = {
   },
   tags: ['autodocs'],
   component: MainMessage,
-  render: ({ ...args }) => (
+  render: ({ ButtonContent, ...args }) => (
     <ThemeProvider theme={projectTheme}>
       <Background $colorScheme={args.colorScheme} className={`${fonts.permanentMarker.variable} ${fonts.caveat.variable}`}>
         <CenterContainer>
           <MainMessage {...args} />
-          <DummyButton>Dummy Button</DummyButton>
+          <HorizontalFade isVisible={args.isCenterTextVisible}>
+            <Button colorScheme={args.colorScheme}>
+              <ButtonContent colorScheme={args.colorScheme} />
+            </Button>
+          </HorizontalFade>
         </CenterContainer>
       </Background>
       <GlobalStyle />
@@ -63,6 +67,7 @@ type Story = StoryObj<typeof meta>;
 export const FrontendOriented: Story = {
   args: {
     centerText: 'Frontend-Oriented',
+    ButtonContent: ButtonContentFrontendOriented,
     isCenterTextVisible: true,
     colorScheme: 'light',
   },
@@ -75,6 +80,7 @@ export const FrontendOriented: Story = {
 export const ComponentDriven: Story = {
   args: {
     centerText: 'Component-Driven',
+    ButtonContent: ButtonContentComponentDriven,
     isCenterTextVisible: true,
     colorScheme: 'light',
   },
@@ -87,6 +93,7 @@ export const ComponentDriven: Story = {
 export const ArchitectureAware: Story = {
   args: {
     centerText: 'Architecture-Aware',
+    ButtonContent: ButtonContentArchitectureAware,
     isCenterTextVisible: true,
     colorScheme: 'light',
   },
@@ -99,6 +106,7 @@ export const ArchitectureAware: Story = {
 export const DesignAware: Story = {
   args: {
     centerText: 'Design-Aware',
+    ButtonContent: ButtonContentDesignAware,
     isCenterTextVisible: true,
     colorScheme: 'light',
   },
