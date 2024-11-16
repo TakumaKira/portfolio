@@ -59,6 +59,8 @@ function ButtonContentComponentDriven({ colorScheme }: { colorScheme: ColorSchem
 const StyledCPSAIcon = styled(Image)<{ $colorScheme: ColorScheme }>`
   filter: grayscale(100%) brightness(${({ $colorScheme }) => $colorScheme === 'light' ? 1 : 0.75});
   opacity: 0.5;
+  width: 2rem;
+  height: 2rem;
 `
 function CPSAIcon({ colorScheme }: { colorScheme: ColorScheme }) {
   return (
