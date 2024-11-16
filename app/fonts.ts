@@ -28,7 +28,7 @@ const caveat = localFont({
 });
 const ptSerifRegular = localFont({
   src: "./fonts/PTSerif-Regular.ttf",
-  variable: "--font-pt-serif",
+  variable: "--font-pt-serif-regular",
   weight: "400",
 });
 const ptSerifBold = localFont({

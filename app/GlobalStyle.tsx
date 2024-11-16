@@ -16,10 +16,7 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     padding: 0;
     margin: 0;
-    transition: background ${({ theme }) => (theme as ProjectTheme).colorTransitionDuration}s, color ${({ theme }) => (theme as ProjectTheme).colorTransitionDuration}s ease-in-out, background-color ${({ theme }) => (theme as ProjectTheme).colorTransitionDuration}s ease-in-out;
-  }
-
-  body {
+    transition: background ${({ theme }) => (theme as ProjectTheme).colorTransitionDuration}s, color ${({ theme }) => (theme as ProjectTheme).colorTransitionDuration}s, background-color ${({ theme }) => (theme as ProjectTheme).colorTransitionDuration}s;
     font-family: serif;
   }
 `
