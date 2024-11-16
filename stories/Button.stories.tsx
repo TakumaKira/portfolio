@@ -17,13 +17,30 @@ const Background = styled.div<{ $colorScheme: ColorScheme }>`
   justify-content: center;
   align-items: center;
 `
-const GithubIcon = styled(GithubSVG)`
+const ButtonContentWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+`
+const GithubIcon = styled(GithubSVG)<{ $colorScheme: ColorScheme }>`
+  height: 2rem;
+  width: 2rem;
   path {
-    fill: red;
+    fill: ${({ $colorScheme, theme }) => (theme as ProjectTheme).colors.typeInverse[$colorScheme]};
   }
 `
+function ButtonContentFrontendOriented({ colorScheme }: { colorScheme: ColorScheme }) {
+  return (
+    <ButtonContentWrapper>
+      <GithubIcon $colorScheme={colorScheme} />
+      <span>Check my code</span>
+    </ButtonContentWrapper>
+  )
+}
 
-type ButtonPropsAndCustomArgs = React.ComponentProps<typeof Button>;
+type ButtonPropsAndCustomArgs = React.ComponentProps<typeof Button> & {
+  Content: React.ComponentType<{ colorScheme: ColorScheme }>
+};
 const meta: Meta<ButtonPropsAndCustomArgs> = {
   title: 'Component/Button',
   parameters: {
@@ -31,10 +48,12 @@ const meta: Meta<ButtonPropsAndCustomArgs> = {
   },
   tags: ['autodocs'],
   component: Button,
-  render: ({ ...args }) => (
+  render: ({ Content, ...args }) => (
     <ThemeProvider theme={projectTheme}>
       <Background $colorScheme={args.colorScheme} className={`${fonts.ptSerifRegular.variable}`}>
-        <Button {...args} />
+        <Button {...args}>
+          <Content colorScheme={args.colorScheme} />
+        </Button>
       </Background>
       <GlobalStyle />
     </ThemeProvider>
@@ -54,12 +73,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 export const FrontendOriented: Story = {
   args: {
-    children: (
-      <div>
-        <GithubIcon />
-        <span>Check my code</span>
-      </div>
-    ),
+    Content: ButtonContentFrontendOriented,
     colorScheme: 'light',
   },
   parameters: {
@@ -68,48 +82,48 @@ export const FrontendOriented: Story = {
     },
   },
 }
-export const ComponentDriven: Story = {
-  args: {
-    children: (
-      <div>
-        <span>Check</span>
-      </div>
-    ),
-    colorScheme: 'light',
-  },
-  parameters: {
-    backgrounds: {
-      default: 'Light',
-    },
-  },
-}
-export const ArchitectureAware: Story = {
-  args: {
-    children: (
-      <div>
-        <span>Check my certification</span>
-      </div>
-    ),
-    colorScheme: 'light',
-  },
-  parameters: {
-    backgrounds: {
-      default: 'Light',
-    },
-  },
-}
-export const DesignAware: Story = {
-  args: {
-    children: (
-      <div>
-        <span>Check</span>
-      </div>
-    ),
-    colorScheme: 'light',
-  },
-  parameters: {
-    backgrounds: {
-      default: 'Light',
-    },
-  },
-}
+// export const ComponentDriven: Story = {
+//   args: {
+//     children: (
+//       <div>
+//         <span>Check</span>
+//       </div>
+//     ),
+//     colorScheme: 'light',
+//   },
+//   parameters: {
+//     backgrounds: {
+//       default: 'Light',
+//     },
+//   },
+// }
+// export const ArchitectureAware: Story = {
+//   args: {
+//     children: (
+//       <div>
+//         <span>Check my certification</span>
+//       </div>
+//     ),
+//     colorScheme: 'light',
+//   },
+//   parameters: {
+//     backgrounds: {
+//       default: 'Light',
+//     },
+//   },
+// }
+// export const DesignAware: Story = {
+//   args: {
+//     children: (
+//       <div>
+//         <span>Check</span>
+//       </div>
+//     ),
+//     colorScheme: 'light',
+//   },
+//   parameters: {
+//     backgrounds: {
+//       default: 'Light',
+//     },
+//   },
+// }
