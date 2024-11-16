@@ -7,7 +7,7 @@ import Button from './Button';
 import { type ColorScheme, type ProjectTheme, projectTheme } from '@/app/theme';
 import GlobalStyle from '@/app/GlobalStyle';
 import fonts from '@/app/fonts';
-import { GithubSVG } from '@/app/svg';
+import { GithubSVG, StorybookDefaultSVG, StorybookInverseSVG } from '@/app/svg';
 
 const Background = styled.div<{ $colorScheme: ColorScheme }>`
   min-width: 100vw;
@@ -34,6 +34,23 @@ function ButtonContentFrontendOriented({ colorScheme }: { colorScheme: ColorSche
     <ButtonContentWrapper>
       <GithubIcon $colorScheme={colorScheme} />
       <span>Check my code</span>
+    </ButtonContentWrapper>
+  )
+}
+const StorybookInverseIcon = styled(StorybookInverseSVG)`
+  height: 2rem;
+  width: 10rem;
+  opacity: 0.75;
+`
+const StorybookDefaultIcon = styled(StorybookDefaultSVG)`
+  height: 2rem;
+  width: 10rem;
+`
+function ButtonContentComponentDriven({ colorScheme }: { colorScheme: ColorScheme }) {
+  return (
+    <ButtonContentWrapper>
+      <span>Check</span>
+      {colorScheme === 'light' ? <StorybookInverseIcon /> : <StorybookDefaultIcon />}
     </ButtonContentWrapper>
   )
 }
@@ -82,21 +99,17 @@ export const FrontendOriented: Story = {
     },
   },
 }
-// export const ComponentDriven: Story = {
-//   args: {
-//     children: (
-//       <div>
-//         <span>Check</span>
-//       </div>
-//     ),
-//     colorScheme: 'light',
-//   },
-//   parameters: {
-//     backgrounds: {
-//       default: 'Light',
-//     },
-//   },
-// }
+export const ComponentDriven: Story = {
+  args: {
+    Content: ButtonContentComponentDriven,
+    colorScheme: 'light',
+  },
+  parameters: {
+    backgrounds: {
+      default: 'Light',
+    },
+  },
+}
 // export const ArchitectureAware: Story = {
 //   args: {
 //     children: (
