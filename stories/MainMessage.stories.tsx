@@ -9,7 +9,6 @@ import GlobalStyle from '@/app/GlobalStyle';
 import fonts from '@/app/fonts';
 import Button from './Button';
 import { ButtonContentArchitectureAware, ButtonContentComponentDriven, ButtonContentDesignAware, ButtonContentFrontendOriented } from './ButtonContent';
-import HorizontalFade from './HorizontalFade';
 
 const Background = styled.div<{ $colorScheme: ColorScheme }>`
   min-width: 100vw;
@@ -41,11 +40,9 @@ const meta: Meta<MainMessagePropsAndCustomArgs> = {
       <Background $colorScheme={args.colorScheme} className={`${fonts.permanentMarker.variable} ${fonts.caveat.variable}`}>
         <CenterContainer>
           <MainMessage {...args} />
-          <HorizontalFade isVisible={args.isCenterTextVisible}>
-            <Button colorScheme={args.colorScheme}>
-              <ButtonContent colorScheme={args.colorScheme} />
-            </Button>
-          </HorizontalFade>
+          <Button colorScheme={args.colorScheme}>
+            <ButtonContent colorScheme={args.colorScheme} />
+          </Button>
         </CenterContainer>
       </Background>
       <GlobalStyle />
