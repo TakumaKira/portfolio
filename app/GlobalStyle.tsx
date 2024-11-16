@@ -4,10 +4,10 @@ import { ProjectTheme } from './theme'
 const GlobalStyle = createGlobalStyle`
   :root {
     font-size: ${({ theme }) => (theme as ProjectTheme).rootFontSize.default}px;
-    @media screen and (max-width: ${({ theme }) => (theme as ProjectTheme).breakPoints.maxWidthMobile}px) {
+    @media screen and (max-width: ${({ theme }) => (theme as ProjectTheme).breakPoints.minWidthTablet - 1}px) {
       font-size: ${({ theme }) => (theme as ProjectTheme).rootFontSize.mobile}px;
     }
-    @media screen and (max-width: ${({ theme }) => (theme as ProjectTheme).breakPoints.minViableWidth}px) {
+    @media screen and (max-width: ${({ theme }) => (theme as ProjectTheme).breakPoints.minViableWidth - 1}px) {
       font-size: ${({ theme }) => (theme as ProjectTheme).rootFontSize.mobile / (theme as ProjectTheme).breakPoints.minViableWidth * 100}vw;
     }
   }

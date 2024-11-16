@@ -13,7 +13,7 @@ const Button = styled.button`
 const Text = styled.span<{ $colorScheme: ColorScheme }>`
   font-family: var(${({ theme }) => (theme as ProjectTheme).fonts.main});
   font-size: 4rem;
-  @media screen and (max-width: ${({ theme }) => (theme as ProjectTheme).breakPoints.maxWidthMobile}px) {
+  @media screen and (max-width: ${({ theme }) => (theme as ProjectTheme).breakPoints.minWidthTablet - 1}px) {
     font-size: 3rem;
   }
   line-height: 1;

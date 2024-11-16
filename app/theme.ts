@@ -35,9 +35,9 @@ export const projectTheme = {
     /** px */
     minViableWidth: 390,
     /** px */
-    maxWidthMobile: 450,
+    minWidthTablet: 700,
     /** px */
-    maxWidthTablet: 900,
+    minWidthDesktop: 1200,
   },
 } as const
 export type ProjectTheme = typeof projectTheme;

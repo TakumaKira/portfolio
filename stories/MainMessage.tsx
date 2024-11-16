@@ -9,7 +9,7 @@ const Container = styled.div`
 const SubText = styled.span<{ $colorScheme: ColorScheme, $position: 'pre' | 'post' }>`
   font-family: var(${({ theme }) => (theme as ProjectTheme).fonts.sub});
   color: ${({ theme, $colorScheme }) => (theme as ProjectTheme).colors.typeSecondary[$colorScheme]};
-  @media (max-width: ${({ theme }) => (theme as ProjectTheme).breakPoints.maxWidthMobile}px) {
+  @media (max-width: ${({ theme }) => (theme as ProjectTheme).breakPoints.minWidthTablet - 1}px) {
     position: relative;
     font-size: ${({ theme }) => 27 / (theme as ProjectTheme).rootFontSize.mobile}rem;
     display: flex;
@@ -17,14 +17,14 @@ const SubText = styled.span<{ $colorScheme: ColorScheme, $position: 'pre' | 'pos
     ${({ $position }) => $position === 'pre' ? 'margin-bottom: calc(1rem / 3);' : 'margin-top: 1rem;'}
     ${({ $position }) => $position === 'pre' ? 'margin-left: 1rem;' : 'margin-right: calc(1rem / 3);'}
   }
-  @media (max-width: ${({ theme }) => (theme as ProjectTheme).breakPoints.maxWidthTablet}px) {
+  @media (max-width: ${({ theme }) => (theme as ProjectTheme).breakPoints.minWidthDesktop - 1}px) {
     position: relative;
     font-size: ${({ theme }) => 36 / (theme as ProjectTheme).rootFontSize.default}rem;
     display: flex;
     justify-content: ${({ $position }) => $position === 'pre' ? 'flex-start' : 'flex-end'};
     ${({ $position }) => $position === 'pre' ? '' : 'margin-top: 1rem;'}
   }
-  @media (min-width: ${({ theme }) => (theme as ProjectTheme).breakPoints.maxWidthTablet + 1}px) {
+  @media (min-width: ${({ theme }) => (theme as ProjectTheme).breakPoints.minWidthDesktop}px) {
     position: absolute;
     bottom: 0;
     ${({ $position }) => $position === 'pre' ? 'right: calc(100% + 1rem);' : 'left: calc(100% + 1rem);'}
