@@ -22,7 +22,7 @@ export default function Button({
   onClick?: () => void,
 }) {
   return (
-    <StyledButton $colorScheme={colorScheme} onClick={onClick}>
+    <StyledButton $colorScheme={colorScheme} onClick={onClick} className="clickable">
       {children}
     </StyledButton>
   )

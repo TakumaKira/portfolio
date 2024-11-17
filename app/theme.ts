@@ -26,12 +26,28 @@ export const projectTheme = {
       light: '#ADABA1',
       dark: '#61615F',
     },
+    iconPrimary: {
+      light: '#ABA99E',
+      dark: '#807E76',
+    },
+    toggleBg: {
+      light: '#C8C6B8',
+      dark: '#56554D',
+    },
+    toggleKnob: {
+      light: '#9A998E',
+      dark: '#8E8D80',
+    },
   },
   colorTransitionDuration: 0.2,
   shadows: {
     buttonInverse: {
       light: '1px 1px 1px 1px #48484840',
       dark: '1px 1px 1px 1px #21201D59',
+    },
+    toggleKnob: {
+      light: '0px 0px 2px 0px #5048208c',
+      dark: '0px 0px 1px 0px #3E3D3940',
     },
   },
   // fonts are available as css variables in the global scope, using `next/font/local`

@@ -22,5 +22,13 @@ const GlobalStyle = createGlobalStyle`
       fill ${({ theme }) => (theme as ProjectTheme).colorTransitionDuration}s;
     font-family: serif;
   }
+
+  .clickable {
+    cursor: pointer;
+    transition: opacity 0.1s;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
 `
 export default GlobalStyle
