@@ -35,7 +35,7 @@ const meta: Meta<FormLikePropsAndCustomArgs> = {
   ),
   argTypes: {
     colorScheme: {
-      control: 'select',
+      control: 'radio',
       options: ['light', 'dark'],
     },
   },

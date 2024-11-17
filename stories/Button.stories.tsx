@@ -40,7 +40,7 @@ const meta: Meta<ButtonPropsAndCustomArgs> = {
   ),
   argTypes: {
     colorScheme: {
-      control: 'select',
+      control: 'radio',
       options: ['light', 'dark'],
     },
   },

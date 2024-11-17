@@ -54,7 +54,7 @@ const meta: Meta<HorizontalFadePropsAndCustomArgs> = {
   ),
   argTypes: {
     colorScheme: {
-      control: 'select',
+      control: 'radio',
       options: ['light', 'dark'],
     },
   },

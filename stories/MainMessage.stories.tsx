@@ -50,7 +50,7 @@ const meta: Meta<MainMessagePropsAndCustomArgs> = {
   ),
   argTypes: {
     colorScheme: {
-      control: 'select',
+      control: 'radio',
       options: ['light', 'dark'],
     },
   },
