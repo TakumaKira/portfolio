@@ -9,6 +9,7 @@ import GlobalStyle from '@/app/GlobalStyle';
 import fonts from '@/app/fonts';
 import Button from './Button';
 import { ButtonContentArchitectureAware, ButtonContentComponentDriven, ButtonContentDesignAware, ButtonContentFrontendOriented } from './ButtonContent';
+import { FadeState } from './HorizontalFade';
 
 const Background = styled.div<{ $colorScheme: ColorScheme }>`
   min-width: 100vw;
@@ -53,6 +54,10 @@ const meta: Meta<MainMessagePropsAndCustomArgs> = {
       control: 'radio',
       options: ['light', 'dark'],
     },
+    centerTextState: {
+      control: 'radio',
+      options: Object.values(FadeState),
+    },
   },
   args: {
     onChangeState: fn(),
@@ -65,7 +70,7 @@ export const FrontendOriented: Story = {
   args: {
     centerText: 'Frontend-Oriented',
     ButtonContent: ButtonContentFrontendOriented,
-    isCenterTextVisible: true,
+    centerTextState: FadeState.VISIBLE,
     colorScheme: 'light',
   },
   parameters: {
@@ -78,7 +83,7 @@ export const ComponentDriven: Story = {
   args: {
     centerText: 'Component-Driven',
     ButtonContent: ButtonContentComponentDriven,
-    isCenterTextVisible: true,
+    centerTextState: FadeState.VISIBLE,
     colorScheme: 'light',
   },
   parameters: {
@@ -91,7 +96,7 @@ export const ArchitectureAware: Story = {
   args: {
     centerText: 'Architecture-Aware',
     ButtonContent: ButtonContentArchitectureAware,
-    isCenterTextVisible: true,
+    centerTextState: FadeState.VISIBLE,
     colorScheme: 'light',
   },
   parameters: {
@@ -104,7 +109,7 @@ export const DesignAware: Story = {
   args: {
     centerText: 'Design-Aware',
     ButtonContent: ButtonContentDesignAware,
-    isCenterTextVisible: true,
+    centerTextState: FadeState.VISIBLE,
     colorScheme: 'light',
   },
   parameters: {

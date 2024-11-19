@@ -7,6 +7,7 @@ import FormLike from './FormLike';
 import { type ColorScheme, type ProjectTheme, projectTheme } from '@/app/theme';
 import GlobalStyle from '@/app/GlobalStyle';
 import fonts from '@/app/fonts';
+import { FadeState } from './HorizontalFade';
 
 const Background = styled.div<{ $colorScheme: ColorScheme }>`
   min-width: 100vw;
@@ -38,6 +39,10 @@ const meta: Meta<FormLikePropsAndCustomArgs> = {
       control: 'radio',
       options: ['light', 'dark'],
     },
+    state: {
+      control: 'radio',
+      options: Object.values(FadeState),
+    },
   },
   args: {
     onChangeState: fn(),
@@ -51,7 +56,7 @@ export const FrontendOriented: Story = {
     text: 'Frontend-Oriented',
     size: 'large',
     align: 'center',
-    isVisible: true,
+    state: FadeState.VISIBLE,
     colorScheme: 'light',
   },
   parameters: {
@@ -65,7 +70,7 @@ export const ComponentDriven: Story = {
     text: 'Component-Driven',
     size: 'large',
     align: 'center',
-    isVisible: true,
+    state: FadeState.VISIBLE,
     colorScheme: 'light',
   },
   parameters: {
@@ -79,7 +84,7 @@ export const ArchitectureAware: Story = {
     text: 'Architecture-Aware',
     size: 'large',
     align: 'center',
-    isVisible: true,
+    state: FadeState.VISIBLE,
     colorScheme: 'light',
   },
   parameters: {
@@ -93,7 +98,7 @@ export const DesignAware: Story = {
     text: 'Design-Aware',
     size: 'large',
     align: 'center',
-    isVisible: true,
+    state: FadeState.VISIBLE,
     colorScheme: 'light',
   },
   parameters: {
@@ -107,7 +112,7 @@ export const Title: Story = {
     text: 'Takuma',
     size: 'small',
     align: 'left',
-    isVisible: true,
+    state: FadeState.VISIBLE,
     colorScheme: 'light',
   },
   parameters: {

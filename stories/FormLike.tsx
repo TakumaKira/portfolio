@@ -33,19 +33,19 @@ export default function FormLike({
   size,
   align,
   colorScheme,
-  isVisible,
+  state,
   onChangeState,
 }: {
   text?: string,
   size: 'large' | 'small',
   align: 'center' | 'left',
   colorScheme: ColorScheme,
-  isVisible: boolean,
+  state: FadeState,
   onChangeState?: (state: FadeState) => void,
 }) {
   return (
     <Form $colorScheme={colorScheme} $size={size} $align={align}>
-      <HorizontalFade isVisible={isVisible} onChangeState={onChangeState}>
+      <HorizontalFade state={state} onChangeState={onChangeState}>
         <Text $colorScheme={colorScheme} $size={size}>{text}</Text>
       </HorizontalFade>
     </Form>

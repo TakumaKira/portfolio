@@ -36,12 +36,12 @@ const SubText = styled.span<{ $colorScheme: ColorScheme, $position: 'pre' | 'pos
 export default function MainMessage({
   centerText,
   colorScheme,
-  isCenterTextVisible,
+  centerTextState,
   onChangeState,
 }: {
   centerText?: string,
   colorScheme: ColorScheme,
-  isCenterTextVisible: boolean,
+  centerTextState: FadeState,
   onChangeState?: (state: FadeState) => void,
 }) {
   return (
@@ -52,7 +52,7 @@ export default function MainMessage({
         size="large"
         align="center"
         colorScheme={colorScheme}
-        isVisible={isCenterTextVisible}
+        state={centerTextState}
         onChangeState={onChangeState}
       />
       <SubText $colorScheme={colorScheme} $position='post'>software developer.</SubText>

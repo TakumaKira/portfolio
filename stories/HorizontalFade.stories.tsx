@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
 import styled, { ThemeProvider } from 'styled-components';
 
-import HorizontalFade from './HorizontalFade';
+import HorizontalFade, { FadeState } from './HorizontalFade';
 
 import { type ColorScheme, type ProjectTheme, projectTheme } from '@/app/theme';
 import fonts from '@/app/fonts';
@@ -57,6 +57,10 @@ const meta: Meta<HorizontalFadePropsAndCustomArgs> = {
       control: 'radio',
       options: ['light', 'dark'],
     },
+    state: {
+      control: 'radio',
+      options: Object.values(FadeState),
+    },
   },
   args: {
     onChangeState: fn(),
@@ -68,7 +72,7 @@ type Story = StoryObj<typeof meta>;
 export const FrontendOriented: Story = {
   args: {
     text: 'Frontend-Oriented',
-    isVisible: true,
+    state: FadeState.VISIBLE,
     colorScheme: 'light',
   },
   parameters: {
@@ -80,7 +84,7 @@ export const FrontendOriented: Story = {
 export const ComponentDriven: Story = {
   args: {
     text: 'Component-Driven',
-    isVisible: true,
+    state: FadeState.VISIBLE,
     colorScheme: 'light',
   },
   parameters: {
@@ -92,7 +96,7 @@ export const ComponentDriven: Story = {
 export const ArchitectureAware: Story = {
   args: {
     text: 'Architecture-Aware',
-    isVisible: true,
+    state: FadeState.VISIBLE,
     colorScheme: 'light',
   },
   parameters: {
@@ -104,7 +108,7 @@ export const ArchitectureAware: Story = {
 export const DesignAware: Story = {
   args: {
     text: 'Design-Aware',
-    isVisible: true,
+    state: FadeState.VISIBLE,
     colorScheme: 'light',
   },
   parameters: {
