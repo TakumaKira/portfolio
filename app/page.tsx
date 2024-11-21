@@ -7,7 +7,7 @@ import MainMessage from "@/stories/MainMessage";
 import { useColorSchemeControl } from "./contexts/ColorSchemeControl";
 import Button from "@/stories/Button";
 import { ButtonContentArchitectureAware, ButtonContentComponentDriven, ButtonContentDesignAware, ButtonContentFrontendOriented } from "@/stories/ButtonContent";
-import HorizontalFade, { FadeState } from "@/stories/HorizontalFade";
+import FadeBox, { FadeState } from "@/stories/FadeBox";
 
 const Container = styled.div`
   display: flex;
@@ -24,9 +24,34 @@ const CenterContainer = styled.div`
   gap: 1.5rem;
 `
 
-const CENTER_TEXT_VISIBLE_INITIAL_DELAY = 1000
-const CENTER_TEXT_VISIBLE_DURATION = 2000
-const CENTER_TEXT_INVISIBLE_DURATION = 500
+/**
+ * Timinig chart
+ * 
+ *                  0  .  1  .  2  .  3  .  4  .  5  .  6  .  7  .  8  .  9  .  10  .  11  .  12  .  13  .  14  .  15
+ * 
+ * Page loaded:     1
+ * 
+ * Layout shown:    0  1
+ * 
+ * Title shown:     0     1
+ * 
+ * Switch content:  1                                            1                                           1
+ * 
+ * Center text:     H        I           V           O           H  I            V             O             H
+ * 
+ * Button:          H                 I  V                    O  H           I   V                       O   H
+ * 
+ * Button enabled:  F                    T                    F                  T                       F
+ */
+const TIMINGS = {
+  CENTER_TEXT_VISIBLE_INITIAL_DELAY: 1000,
+  CENTER_TEXT_VISIBLE_DURATION: 2000,
+  CENTER_TEXT_INVISIBLE_DURATION: 500,
+  BUTTON_VISIBLE_INITIAL_DELAY: 3000,
+  BUTTON_VISIBLE_DURATION: 0,
+  BUTTON_INVISIBLE_DURATION: 2500,
+}
+
 const rotatingContents = [
   {
     text: 'Frontend-Oriented',
@@ -54,10 +79,14 @@ export default function Home() {
   }, [colorScheme])
 
   const [centerTextState, setCenterTextState] = React.useState(FadeState.HIDDEN)
+  const [buttonState, setButtonState] = React.useState(FadeState.HIDDEN)
   const triggerInitialAnimation = () => {
     setTimeout(() => {
       setCenterTextState(FadeState.FADING_IN)
-    }, CENTER_TEXT_VISIBLE_INITIAL_DELAY)
+    }, TIMINGS.CENTER_TEXT_VISIBLE_INITIAL_DELAY)
+    setTimeout(() => {
+      setButtonState(FadeState.FADING_IN)
+    }, TIMINGS.BUTTON_VISIBLE_INITIAL_DELAY)
   }
   React.useEffect(() => triggerInitialAnimation(), [])
 
@@ -72,25 +101,42 @@ export default function Home() {
     if (state === FadeState.VISIBLE) {
       setTimeout(() => {
         setCenterTextState(FadeState.FADING_OUT)
-      }, CENTER_TEXT_VISIBLE_DURATION)
+      }, TIMINGS.CENTER_TEXT_VISIBLE_DURATION)
     } else if (state === FadeState.HIDDEN) {
       switchContent()
       setTimeout(() => {
         setCenterTextState(FadeState.FADING_IN)
-      }, CENTER_TEXT_INVISIBLE_DURATION)
+      }, TIMINGS.CENTER_TEXT_INVISIBLE_DURATION)
     }
   }
+  const handleButtonChangeState = (state: FadeState) => {
+    if (state === FadeState.VISIBLE) {
+      setTimeout(() => {
+        setButtonState(FadeState.FADING_OUT)
+      }, TIMINGS.BUTTON_INVISIBLE_DURATION)
+    } else if (state === FadeState.HIDDEN) {
+      setTimeout(() => {
+        setButtonState(FadeState.FADING_IN)
+      }, TIMINGS.BUTTON_INVISIBLE_DURATION)
+    }
+  }
+  React.useEffect(() => {
+    console.log('centerTextState', centerTextState)
+  }, [centerTextState])
+  React.useEffect(() => {
+    console.log('buttonState', buttonState)
+  }, [buttonState])
 
   if (!isClient) return null
   return (
     <Container>
       <CenterContainer>
         <MainMessage centerText={centerText} colorScheme={colorScheme} centerTextState={centerTextState} onChangeState={handleMainMessageChangeState} />
-        <HorizontalFade state={centerTextState}>
+        <FadeBox state={buttonState} mode="dissolve" onChangeState={handleButtonChangeState}>
           <Button colorScheme={colorScheme}>
             <ButtonContent colorScheme={colorScheme} />
           </Button>
-        </HorizontalFade>
+        </FadeBox>
       </CenterContainer>
     </Container>
   );

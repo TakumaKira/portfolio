@@ -7,7 +7,7 @@ import FormLike from './FormLike';
 import { type ColorScheme, type ProjectTheme, projectTheme } from '@/app/theme';
 import GlobalStyle from '@/app/GlobalStyle';
 import fonts from '@/app/fonts';
-import { FadeState } from './HorizontalFade';
+import { FadeState } from './FadeBox';
 
 const Background = styled.div<{ $colorScheme: ColorScheme }>`
   min-width: 100vw;

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { type ColorScheme, type ProjectTheme } from "@/app/theme";
-import HorizontalFade, { FadeState } from "./HorizontalFade";
+import FadeBox, { FadeState } from "./FadeBox";
 
 const Form = styled.div<{ $colorScheme: ColorScheme, $size: 'large' | 'small', $align: 'center' | 'left', $minWidth?: string }>`
   min-width: ${({ theme, $size }) => $size === 'small' ? 212 / (theme as ProjectTheme).rootFontSize.default : 680 / (theme as ProjectTheme).rootFontSize.default}rem;
@@ -45,9 +45,9 @@ export default function FormLike({
 }) {
   return (
     <Form $colorScheme={colorScheme} $size={size} $align={align}>
-      <HorizontalFade state={state} onChangeState={onChangeState}>
+      <FadeBox state={state} mode="horizontal" onChangeState={onChangeState}>
         <Text $colorScheme={colorScheme} $size={size}>{text}</Text>
-      </HorizontalFade>
+      </FadeBox>
     </Form>
   )
 }

@@ -9,7 +9,7 @@ import GlobalStyle from '@/app/GlobalStyle';
 import fonts from '@/app/fonts';
 import Button from './Button';
 import { ButtonContentArchitectureAware, ButtonContentComponentDriven, ButtonContentDesignAware, ButtonContentFrontendOriented } from './ButtonContent';
-import { FadeState } from './HorizontalFade';
+import { FadeState } from './FadeBox';
 
 const Background = styled.div<{ $colorScheme: ColorScheme }>`
   min-width: 100vw;

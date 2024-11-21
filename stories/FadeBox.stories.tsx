@@ -2,11 +2,13 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
 import styled, { ThemeProvider } from 'styled-components';
 
-import HorizontalFade, { FadeState } from './HorizontalFade';
+import FadeBox, { FadeState } from './FadeBox';
 
 import { type ColorScheme, type ProjectTheme, projectTheme } from '@/app/theme';
 import fonts from '@/app/fonts';
 import GlobalStyle from '@/app/GlobalStyle';
+import Button from './Button';
+import { ButtonContentFrontendOriented } from './ButtonContent';
 
 const Background = styled.div<{ $colorScheme: ColorScheme }>`
   min-width: 100vw;
@@ -32,22 +34,31 @@ const MockText = styled.span<{ $colorScheme: ColorScheme }>`
   color: ${({ $colorScheme, theme }) => (theme as ProjectTheme).colors.typePrimary[$colorScheme]};
 `
 
-type HorizontalFadePropsAndCustomArgs = React.ComponentProps<typeof HorizontalFade> & { text?: string, colorScheme: ColorScheme };
-const meta: Meta<HorizontalFadePropsAndCustomArgs> = {
-  title: 'Component/HorizontalFade',
+type FadeBoxPropsAndCustomArgs = React.ComponentProps<typeof FadeBox> & { colorScheme: ColorScheme, exampleType: 'form' | 'free', text?: string, ButtonContent?: ({ colorScheme }: { colorScheme: ColorScheme }) => React.ReactNode };
+const meta: Meta<FadeBoxPropsAndCustomArgs> = {
+  title: 'Component/FadeBox',
   parameters: {
     layout: 'fullscreen',
   },
   tags: ['autodocs'],
-  component: HorizontalFade,
-  render: ({ text, colorScheme, ...args }) => (
+  component: FadeBox,
+  render: ({ exampleType, text, colorScheme, ButtonContent, ...args }) => (
     <ThemeProvider theme={projectTheme}>
       <Background $colorScheme={colorScheme} className={`${fonts.permanentMarker.variable}`}>
-        <MockForm $colorScheme={colorScheme}>
-          <HorizontalFade {...args}>
-            <MockText $colorScheme={colorScheme}>{text}</MockText>
-          </HorizontalFade>
-        </MockForm>
+        {exampleType === 'form' && (
+          <MockForm $colorScheme={colorScheme}>
+            <FadeBox {...args}>
+              <MockText $colorScheme={colorScheme}>{text}</MockText>
+            </FadeBox>
+          </MockForm>
+        )}
+        {exampleType === 'free' && (
+          <FadeBox {...args}>
+            <Button colorScheme={colorScheme}>
+              {ButtonContent && <ButtonContent colorScheme={colorScheme} />}
+            </Button>
+          </FadeBox>
+        )}
       </Background>
       <GlobalStyle />
     </ThemeProvider>
@@ -65,14 +76,16 @@ const meta: Meta<HorizontalFadePropsAndCustomArgs> = {
   args: {
     onChangeState: fn(),
   },
-} satisfies Meta<HorizontalFadePropsAndCustomArgs>;
+} satisfies Meta<FadeBoxPropsAndCustomArgs>;
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 export const FrontendOriented: Story = {
   args: {
+    exampleType: 'form',
     text: 'Frontend-Oriented',
     state: FadeState.VISIBLE,
+    mode: 'horizontal',
     colorScheme: 'light',
   },
   parameters: {
@@ -83,8 +96,10 @@ export const FrontendOriented: Story = {
 }
 export const ComponentDriven: Story = {
   args: {
+    exampleType: 'form',
     text: 'Component-Driven',
     state: FadeState.VISIBLE,
+    mode: 'dissolve',
     colorScheme: 'light',
   },
   parameters: {
@@ -95,8 +110,10 @@ export const ComponentDriven: Story = {
 }
 export const ArchitectureAware: Story = {
   args: {
+    exampleType: 'form',
     text: 'Architecture-Aware',
     state: FadeState.VISIBLE,
+    mode: 'dissolve',
     colorScheme: 'light',
   },
   parameters: {
@@ -107,13 +124,25 @@ export const ArchitectureAware: Story = {
 }
 export const DesignAware: Story = {
   args: {
+    exampleType: 'form',
     text: 'Design-Aware',
     state: FadeState.VISIBLE,
+    mode: 'dissolve',
     colorScheme: 'light',
   },
   parameters: {
     backgrounds: {
       default: 'Light',
     },
+  },
+}
+export const ButtonContent: Story = {
+  args: {
+    exampleType: 'free',
+    ButtonContent: ButtonContentFrontendOriented,
+    state: FadeState.VISIBLE,
+    mode: 'dissolve',
+    colorScheme: 'light',
+    fadeDuration: 500,
   },
 }

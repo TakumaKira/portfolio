@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { ColorScheme, ProjectTheme } from "@/app/theme";
-import { FadeState } from "./HorizontalFade";
+import { FadeState } from "./FadeBox";
 import FormLike from "./FormLike";
 
 const Container = styled.div`
