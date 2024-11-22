@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { ColorScheme, ProjectTheme } from "@/app/theme";
 
-type SelectedSide = 'left' | 'right'
+export type SelectedSide = 'left' | 'right'
 type ToggleItem = {
   Icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>,
 }

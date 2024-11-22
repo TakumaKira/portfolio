@@ -8,6 +8,9 @@ import { useColorSchemeControl } from "./contexts/ColorSchemeControl";
 import Button from "@/stories/Button";
 import { ButtonContentArchitectureAware, ButtonContentComponentDriven, ButtonContentDesignAware, ButtonContentFrontendOriented } from "@/stories/ButtonContent";
 import FadeBox, { FadeState } from "@/stories/FadeBox";
+import FormLike from "@/stories/FormLike";
+import Toggle, { SelectedSide } from "@/stories/Toggle";
+import { DarkModeSVG, LightModeSVG } from "./svg";
 
 const Container = styled.div`
   display: flex;
@@ -15,6 +18,17 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
+`
+const HeaderContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 4rem;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `
 const CenterContainer = styled.div`
   display: flex;
@@ -47,7 +61,7 @@ const TIMINGS = {
   init: [
     { name: 'PAGE_LOADED', duration: 0, tillNext: 500 },
     { name: 'LAYOUT_VISIBLE', duration: 500, tillNext: 500 },
-    { name: 'TITLE_VISIBLE', duration: 500, tillNext: 500 },
+    { name: 'TITLE_VISIBLE', duration: 1000, tillNext: 500 },
   ],
   loop: [
     { name: 'CENTER_TEXT_FADE_IN', duration: 2000, tillNext: 1500 },
@@ -80,12 +94,16 @@ const rotatingContents = [
 ]
 
 export default function Home() {
-  const { colorScheme } = useColorSchemeControl()
+  const { colorScheme, toggleColorScheme } = useColorSchemeControl()
   const [isClient, setIsClient] = React.useState(false)
   React.useEffect(() => {
     setIsClient(true)
   }, [colorScheme])
 
+  const [layoutState, setLayoutState] = React.useState(FadeState.HIDDEN)
+  const [layoutFadeDuration, setLayoutFadeDuration] = React.useState(0)
+  const [titleTextState, setTitleTextState] = React.useState(FadeState.HIDDEN)
+  const [titleTextFadeDuration, setTitleTextFadeDuration] = React.useState(0)
   const [centerTextState, setCenterTextState] = React.useState(FadeState.HIDDEN)
   const [centerTextFadeDuration, setCenterTextFadeDuration] = React.useState(0)
   const [buttonState, setButtonState] = React.useState(FadeState.HIDDEN)
@@ -101,14 +119,14 @@ export default function Home() {
   const trigger = ({ name, duration }: (typeof TIMINGS.init)[number] | (typeof TIMINGS.loop)[number]) => {
     const actions: { [key in ((typeof TIMINGS.init) | (typeof TIMINGS.loop))[number]['name']]: () => void } = {
       // init
-      PAGE_LOADED: () => {
-        console.log('PAGE_LOADED', { duration })
-      },
+      PAGE_LOADED: () => {},
       LAYOUT_VISIBLE: () => {
-        console.log('LAYOUT_VISIBLE', { duration })
+        setLayoutState(FadeState.FADING_IN)
+        setLayoutFadeDuration(duration)
       },
       TITLE_VISIBLE: () => {
-        console.log('TITLE_VISIBLE', { duration })
+        setTitleTextState(FadeState.FADING_IN)
+        setTitleTextFadeDuration(duration)
       },
       // loop
       CENTER_TEXT_FADE_IN: () => {
@@ -171,20 +189,42 @@ export default function Home() {
     }
   }, [])
   const onButtonClick = () => {
-    console.log('onButtonClick')
+    console.log('onButtonClick') // TODO: Open link url from database in new tab
   }
 
   if (!isClient) return null
   return (
-    <Container>
-      <CenterContainer>
-        <MainMessage centerText={centerText} colorScheme={colorScheme} centerTextState={centerTextState} fadeDuration={centerTextFadeDuration} />
-        <FadeBox state={buttonState} mode="dissolve" fadeDuration={buttonFadeDuration}>
-          <Button colorScheme={colorScheme} onClick={onButtonClick} hidden={!isButtonEnabled}>
-            <ButtonContent colorScheme={colorScheme} />
-          </Button>
-        </FadeBox>
-      </CenterContainer>
-    </Container>
+    <FadeBox state={layoutState} mode="dissolve" fadeDuration={layoutFadeDuration}>
+      <Container>
+        <HeaderContainer>
+          <FormLike
+            text="Takuma" // TODO: Get from database
+            size="small"
+            align="left"
+            colorScheme={colorScheme}
+            state={titleTextState}
+            fadeDuration={titleTextFadeDuration}
+          />
+          <Toggle
+            items={{ left: { Icon: LightModeSVG }, right: { Icon: DarkModeSVG } }}
+            selectedSide={{ light: 'left', dark: 'right' }[colorScheme] as SelectedSide}
+            colorScheme={colorScheme} onToggle={toggleColorScheme}
+          />
+        </HeaderContainer>
+        <CenterContainer>
+          <MainMessage
+            centerText={centerText}
+            colorScheme={colorScheme}
+            centerTextState={centerTextState}
+            fadeDuration={centerTextFadeDuration}
+          />
+          <FadeBox state={buttonState} mode="dissolve" fadeDuration={buttonFadeDuration}>
+            <Button colorScheme={colorScheme} onClick={onButtonClick} hidden={!isButtonEnabled}>
+              <ButtonContent colorScheme={colorScheme} />
+            </Button>
+          </FadeBox>
+        </CenterContainer>
+      </Container>
+    </FadeBox>
   );
 }
