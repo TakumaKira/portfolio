@@ -25,7 +25,7 @@ export default function Button({
   onClick?: () => void,
 }) {
   return (
-    <StyledButton $colorScheme={colorScheme} $hidden={hidden} onClick={hidden ? undefined : onClick} className="clickable">
+    <StyledButton $colorScheme={colorScheme} $hidden={hidden} onClick={hidden ? undefined : onClick} className={hidden ? undefined : "clickable"}>
       {children}
     </StyledButton>
   )
