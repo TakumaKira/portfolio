@@ -10,6 +10,7 @@ import fonts from '@/app/fonts';
 import Button from './Button';
 import { ButtonContentArchitectureAware, ButtonContentComponentDriven, ButtonContentDesignAware, ButtonContentFrontendOriented } from './ButtonContent';
 import { FadeState } from './FadeBox';
+import CenterContainer from './CenterContainer';
 
 const Background = styled.div<{ $colorScheme: ColorScheme }>`
   min-width: 100vw;
@@ -19,15 +20,11 @@ const Background = styled.div<{ $colorScheme: ColorScheme }>`
   justify-content: center;
   align-items: center;
 `
-const CenterContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-`
 
 type MainMessagePropsAndCustomArgs = React.ComponentProps<typeof MainMessage> & {
   ButtonContent: React.ComponentType<{ colorScheme: ColorScheme }>
+  isButtonEnabled: boolean
+  onButtonClick: () => void
 };
 const meta: Meta<MainMessagePropsAndCustomArgs> = {
   title: 'Component/MainMessage',
@@ -41,7 +38,7 @@ const meta: Meta<MainMessagePropsAndCustomArgs> = {
       <Background $colorScheme={args.colorScheme} className={`${fonts.permanentMarker.variable} ${fonts.caveat.variable}`}>
         <CenterContainer>
           <MainMessage {...args} />
-          <Button colorScheme={args.colorScheme}>
+          <Button colorScheme={args.colorScheme} hidden={!args.isButtonEnabled} onClick={args.isButtonEnabled ? args.onButtonClick : undefined}>
             <ButtonContent colorScheme={args.colorScheme} />
           </Button>
         </CenterContainer>
@@ -58,9 +55,13 @@ const meta: Meta<MainMessagePropsAndCustomArgs> = {
       control: 'radio',
       options: Object.values(FadeState),
     },
+    isButtonEnabled: {
+      control: 'boolean',
+    },
   },
   args: {
     onChangeState: fn(),
+    onButtonClick: fn(),
   },
 } satisfies Meta<MainMessagePropsAndCustomArgs>;
 export default meta;
@@ -72,6 +73,7 @@ export const FrontendOriented: Story = {
     ButtonContent: ButtonContentFrontendOriented,
     centerTextState: FadeState.VISIBLE,
     colorScheme: 'light',
+    isButtonEnabled: true,
   },
   parameters: {
     backgrounds: {
@@ -85,6 +87,7 @@ export const ComponentDriven: Story = {
     ButtonContent: ButtonContentComponentDriven,
     centerTextState: FadeState.VISIBLE,
     colorScheme: 'light',
+    isButtonEnabled: true,
   },
   parameters: {
     backgrounds: {
@@ -98,6 +101,7 @@ export const ArchitectureAware: Story = {
     ButtonContent: ButtonContentArchitectureAware,
     centerTextState: FadeState.VISIBLE,
     colorScheme: 'light',
+    isButtonEnabled: true,
   },
   parameters: {
     backgrounds: {
@@ -111,6 +115,7 @@ export const DesignAware: Story = {
     ButtonContent: ButtonContentDesignAware,
     centerTextState: FadeState.VISIBLE,
     colorScheme: 'light',
+    isButtonEnabled: true,
   },
   parameters: {
     backgrounds: {

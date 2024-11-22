@@ -11,6 +11,7 @@ import FadeBox, { FadeState } from "@/stories/FadeBox";
 import FormLike from "@/stories/FormLike";
 import Toggle, { SelectedSide } from "@/stories/Toggle";
 import { DarkModeSVG, LightModeSVG } from "./svg";
+import CenterContainer from "@/stories/CenterContainer";
 
 const Container = styled.div`
   display: flex;
@@ -29,13 +30,6 @@ const HeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-`
-const CenterContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
 `
 
 /**

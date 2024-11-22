@@ -10,7 +10,8 @@ const StyledButton = styled.button<{ $colorScheme: ColorScheme, $hidden?: boolea
   font-family: var(${({ theme }) => (theme as ProjectTheme).fonts.normal});
   font-size: 1.5rem;
   box-shadow: ${({ $colorScheme, theme }) => (theme as ProjectTheme).shadows.buttonInverse[$colorScheme]};
-  ${({ $hidden }) => $hidden ? 'cursor: default;' : ''}
+  ${({ $hidden }) => $hidden ? 'opacity: 0;' : ''}
+  ${({ $hidden }) => $hidden ? 'pointer-events: none;' : ''}
 `
 
 export default function Button({
@@ -25,7 +26,7 @@ export default function Button({
   onClick?: () => void,
 }) {
   return (
-    <StyledButton $colorScheme={colorScheme} $hidden={hidden} onClick={hidden ? undefined : onClick} className={hidden ? undefined : "clickable"}>
+    <StyledButton $colorScheme={colorScheme} $hidden={hidden} onClick={onClick} className={hidden ? undefined : "clickable"}>
       {children}
     </StyledButton>
   )
