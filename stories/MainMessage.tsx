@@ -37,11 +37,13 @@ export default function MainMessage({
   centerText,
   colorScheme,
   centerTextState,
+  fadeDuration,
   onChangeState,
 }: {
   centerText?: string,
   colorScheme: ColorScheme,
   centerTextState: FadeState,
+  fadeDuration?: number,
   onChangeState?: (state: FadeState) => void,
 }) {
   return (
@@ -53,6 +55,7 @@ export default function MainMessage({
         align="center"
         colorScheme={colorScheme}
         state={centerTextState}
+        fadeDuration={fadeDuration}
         onChangeState={onChangeState}
       />
       <SubText $colorScheme={colorScheme} $position='post'>software developer.</SubText>

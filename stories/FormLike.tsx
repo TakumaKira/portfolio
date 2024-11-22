@@ -34,6 +34,7 @@ export default function FormLike({
   align,
   colorScheme,
   state,
+  fadeDuration,
   onChangeState,
 }: {
   text?: string,
@@ -41,11 +42,12 @@ export default function FormLike({
   align: 'center' | 'left',
   colorScheme: ColorScheme,
   state: FadeState,
+  fadeDuration?: number,
   onChangeState?: (state: FadeState) => void,
 }) {
   return (
     <Form $colorScheme={colorScheme} $size={size} $align={align}>
-      <FadeBox state={state} mode="horizontal" onChangeState={onChangeState}>
+      <FadeBox state={state} mode="horizontal" fadeDuration={fadeDuration} onChangeState={onChangeState}>
         <Text $colorScheme={colorScheme} $size={size}>{text}</Text>
       </FadeBox>
     </Form>

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { ColorScheme, ProjectTheme } from "@/app/theme";
 
-const StyledButton = styled.button<{ $colorScheme: ColorScheme }>`
+const StyledButton = styled.button<{ $colorScheme: ColorScheme, $hidden?: boolean }>`
   border: none;
   background-color: ${({ $colorScheme, theme }) => (theme as ProjectTheme).colors.surfaceInverse[$colorScheme]};
   color: ${({ $colorScheme, theme }) => (theme as ProjectTheme).colors.typeInverse[$colorScheme]};
@@ -10,19 +10,22 @@ const StyledButton = styled.button<{ $colorScheme: ColorScheme }>`
   font-family: var(${({ theme }) => (theme as ProjectTheme).fonts.normal});
   font-size: 1.5rem;
   box-shadow: ${({ $colorScheme, theme }) => (theme as ProjectTheme).shadows.buttonInverse[$colorScheme]};
+  ${({ $hidden }) => $hidden ? 'cursor: default;' : ''}
 `
 
 export default function Button({
   children,
   colorScheme,
   onClick,
+  hidden,
 }: {
   children: React.ReactNode,
   colorScheme: ColorScheme,
+  hidden?: boolean,
   onClick?: () => void,
 }) {
   return (
-    <StyledButton $colorScheme={colorScheme} onClick={onClick} className="clickable">
+    <StyledButton $colorScheme={colorScheme} $hidden={hidden} onClick={hidden ? undefined : onClick} className="clickable">
       {children}
     </StyledButton>
   )
