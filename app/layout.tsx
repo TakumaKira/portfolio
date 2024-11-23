@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import StyledComponentsRegistry from './lib/registry'
 import fonts from './fonts'
+import { getServerSideData } from "./lib/serverSideData";
+import ServerSideDataProvider from "./contexts/ServerSideData";
 
 const fontClasses = Object.values(fonts).map(({ variable }) => variable).join(' ');
 
@@ -8,17 +10,20 @@ export const metadata: Metadata = {
   title: "Takuma's portfolio",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { config } = await getServerSideData()
   return (
     <html lang="en">
       <body className={fontClasses}>
-        <StyledComponentsRegistry>
-          {children}
-        </StyledComponentsRegistry>
+        <ServerSideDataProvider config={config}>
+          <StyledComponentsRegistry>
+            {children}
+          </StyledComponentsRegistry>
+        </ServerSideDataProvider>
       </body>
     </html>
   );

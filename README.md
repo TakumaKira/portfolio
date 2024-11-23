@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Takuma's Portfolio
 
-## Getting Started
+## How to run
 
-First, run the development server:
+This project uses postgres database. By getting some config data from the database, I as a maintainer can manage some of the contents without modifying the source code and redeploying the application. I leverage Server Component to let Next.js server get the config data directly from the database and render it on the page. These config data are embedded in the HTML as a script tag and no API calls happen on the client side, which is more secure than using API routes.
+
+I uses pnpm as package manager for this project, but you should be able to use npm or yarn as well.
+
+### Install dependencies
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Install prisma cli
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+I use [Prisma](https://www.prisma.io) to manage the database schema and migrations. So you need to install prisma cli to run some commands.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm dlx prisma
+```
 
-## Learn More
+### Generate types for prisma client
 
-To learn more about Next.js, take a look at the following resources:
+You need to generate types using prisma cli to correctly reference types of schema in your IDE.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm prisma generate
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Prepare database
 
-## Deploy on Vercel
+The easiest way to run postgres is using VMs like [Docker](https://www.docker.com) or [OrbStack](https://www.orbstack.dev). Install and run one of them.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Pull the postgres image.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+docker pull postgres
+```
+
+Run the postgres container.
+
+```bash
+docker run --name postgres -e POSTGRES_PASSWORD=password -p 5432:5432 -d postgre
+```
+
+Create a database named `portfolio`. Connect to the database and run the following query.
+
+```sql
+CREATE DATABASE portfolio;
+```
+
+### Deploy prisma migrations
+
+Migrate the schema to the postgres database using prisma cli.
+
+```bash
+CONFIG_DATABASE_URL=postgresql://postgres:password@localhost:5432/portfolio pnpm dlx prisma migrate deploy
+```
+
+Now you have a database works for this project.
+
+### Insert config
+
+Provide the config data to the database, otherwise the application will output console errors and some parts of the page will not work as expected.
+
+```bash
+INSERT INTO "public"."Config" ("id", "name", "type", "value") VALUES
+(1, 'name', 'STRING', 'Takuma'),
+(2, 'repository_url', 'STRING', 'https://github.com/TakumaKira/portfolio'),
+(3, 'storybook_url', 'STRING', 'https://storybook.js.org'),
+(4, 'cpsaf_certification_url', 'STRING', 'https://www.certible.com/badge/33141297-d6b6-4dff-9d43-f36452d85d5c'),
+(5, 'figma_url', 'STRING', 'https://www.figma.com/design/Hcj8I0Y6umFS5mymgsgVKp/Takuma''s-Portfolio-202411');
+```
+
+### Run Next.js
+
+Finally, run the Next.js application. Next.js server requires the database url to connect to the database. You can run the production server by providing the production database url, which is reachable from the Next.js server instance.
+
+```bash
+CONFIG_DATABASE_URL=postgresql://postgres:password@localhost:5432/portfolio pnpm dev
+```

@@ -12,6 +12,9 @@ import FormLike from "@/stories/FormLike";
 import Toggle, { SelectedSide } from "@/stories/Toggle";
 import { DarkModeSVG, LightModeSVG } from "./svg";
 import CenterContainer from "@/stories/CenterContainer";
+import { useServerSideData } from "./contexts/ServerSideData";
+import Link from "next/link";
+import { ServerSideData } from "./lib/serverSideData";
 
 const Container = styled.div`
   display: flex;
@@ -68,26 +71,44 @@ const TIMINGS = {
   ]
 } as const
 
+const NAME_KEY = 'name'
 const rotatingContents = [
   {
     text: 'Frontend-Oriented',
     ButtonContent: ButtonContentFrontendOriented,
+    buttonLinkConfigKey: 'repository_url',
   },
   {
     text: 'Component-Driven',
     ButtonContent: ButtonContentComponentDriven,
+    buttonLinkConfigKey: 'storybook_url',
   },
   {
     text: 'Architecture-Aware',
     ButtonContent: ButtonContentArchitectureAware,
+    buttonLinkConfigKey: 'cpsaf_certification_url',
   },
   {
     text: 'Design-Aware',
     ButtonContent: ButtonContentDesignAware,
+    buttonLinkConfigKey: 'figma_url',
   },
 ]
 
 export default function Home() {
+  const { config } = useServerSideData()
+  const checkConfig = (config: ServerSideData['config']) => {
+    const requiredKeys = [NAME_KEY, ...rotatingContents.map(({ buttonLinkConfigKey }) => buttonLinkConfigKey)]
+    const configKeys = Object.keys(config)
+    const missingKeys = requiredKeys.filter((key) => !configKeys.includes(key))
+    if (missingKeys.length > 0) {
+      console.error('Config is missing some required keys', { missingKeys, config })
+    }
+  }
+  React.useEffect(() => {
+    checkConfig(config)
+  }, [])
+
   const { colorScheme, toggleColorScheme } = useColorSchemeControl()
   const [isClient, setIsClient] = React.useState(false)
   React.useEffect(() => {
@@ -106,6 +127,7 @@ export default function Home() {
   const [currentContentIndex, setCurrentContentIndex] = React.useState(0)
   const centerText = rotatingContents[currentContentIndex].text
   const ButtonContent = rotatingContents[currentContentIndex].ButtonContent
+  const buttonLink = config[rotatingContents[currentContentIndex].buttonLinkConfigKey]
   const switchContent = () => {
     setCurrentContentIndex((prevIndex) => (prevIndex + 1) % rotatingContents.length)
   }
@@ -182,9 +204,6 @@ export default function Home() {
       setCurrentTiming(_initTiming)
     }
   }, [])
-  const onButtonClick = () => {
-    console.log('onButtonClick') // TODO: Open link url from database in new tab
-  }
 
   if (!isClient) return null
   return (
@@ -192,7 +211,7 @@ export default function Home() {
       <Container>
         <HeaderContainer>
           <FormLike
-            text="Takuma" // TODO: Get from database
+            text={config[NAME_KEY] ?? ''}
             size="small"
             align="left"
             colorScheme={colorScheme}
@@ -213,9 +232,13 @@ export default function Home() {
             fadeDuration={centerTextFadeDuration}
           />
           <FadeBox state={buttonState} mode="dissolve" fadeDuration={buttonFadeDuration}>
-            <Button colorScheme={colorScheme} onClick={onButtonClick} hidden={!isButtonEnabled}>
-              <ButtonContent colorScheme={colorScheme} />
-            </Button>
+            {buttonLink &&
+              <Link href={buttonLink} target="_blank">
+                <Button colorScheme={colorScheme} hidden={!isButtonEnabled}>
+                  <ButtonContent colorScheme={colorScheme} />
+                </Button>
+              </Link>
+            }
           </FadeBox>
         </CenterContainer>
       </Container>

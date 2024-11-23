@@ -1,0 +1,19 @@
+datasource db {
+  url      = env("CONFIG_DATABASE_URL")
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum ConfigValueType {
+  STRING
+}
+
+model Config {
+  id        Int      @id @default(autoincrement())
+  name      String
+  type      ConfigValueType
+  value     String?
+}
