@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import StyledComponentsRegistry from './lib/registry'
 import fonts from './fonts'
-import { Config, getServerSideData } from "./lib/serverSideData";
+import { getServerSideData } from "./lib/serverSideData";
 import ServerSideDataProvider from "./contexts/ServerSideData";
 
 const fontClasses = Object.values(fonts).map(({ variable }) => variable).join(' ');
@@ -15,7 +15,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { config } = await getServerSideData<{ config: Config }>()
+  const { config } = await getServerSideData()
   return (
     <html lang="en">
       <body className={fontClasses}>

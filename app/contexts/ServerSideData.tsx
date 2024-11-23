@@ -1,20 +1,16 @@
 'use client'
 
 import React from "react";
-import { Config } from "../lib/serverSideData";
+import { ServerSideData, initServerSideData } from "../lib/serverSideData"
 
-const ServerSideDataContext = React.createContext<{
-  config: Config,
-}>({
-  config: '',
-})
+const ServerSideDataContext = React.createContext<ServerSideData>(initServerSideData)
 
 export default function ServerSideDataProvider({
   children,
   config,
 }: {
   children: React.ReactNode,
-  config: Config,
+  config: ServerSideData['config'],
 }) {
   return (
     <ServerSideDataContext.Provider value={{ config }}>

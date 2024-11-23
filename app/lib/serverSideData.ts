@@ -1,6 +1,18 @@
-export type Config = string
+import prisma from "./prismaClient"
 
-export const getServerSideData = async <DataType>() => {
-  const data = await new Promise<DataType>((resolve) => setTimeout(() => resolve({ config: 'Hello, world!' } as DataType), 1000))
-  return data
+type ConfigEntity = Awaited<ReturnType<typeof prisma.config.findMany>>[number]
+type Config = {
+  [key in ConfigEntity['name']]: ConfigEntity['value']
+}
+export type ServerSideData = {
+  config: Config
+}
+export const initServerSideData: ServerSideData = {
+  config: {},
+}
+
+export const getServerSideData = async (): Promise<ServerSideData> => {
+  const configRaw = await prisma.config.findMany()
+  const config = Object.fromEntries(configRaw.map(({ name, value }) => [name, value]))
+  return { config }
 }

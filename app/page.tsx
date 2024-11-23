@@ -73,24 +73,27 @@ const rotatingContents = [
   {
     text: 'Frontend-Oriented',
     ButtonContent: ButtonContentFrontendOriented,
+    buttonLinkConfigKey: 'repository_url',
   },
   {
     text: 'Component-Driven',
     ButtonContent: ButtonContentComponentDriven,
+    buttonLinkConfigKey: 'storybook_url',
   },
   {
     text: 'Architecture-Aware',
     ButtonContent: ButtonContentArchitectureAware,
+    buttonLinkConfigKey: 'cpsaf_certification_url',
   },
   {
     text: 'Design-Aware',
     ButtonContent: ButtonContentDesignAware,
+    buttonLinkConfigKey: 'figma_url',
   },
 ]
 
 export default function Home() {
   const { config } = useServerSideData()
-  console.log(config)
 
   const { colorScheme, toggleColorScheme } = useColorSchemeControl()
   const [isClient, setIsClient] = React.useState(false)
@@ -110,6 +113,7 @@ export default function Home() {
   const [currentContentIndex, setCurrentContentIndex] = React.useState(0)
   const centerText = rotatingContents[currentContentIndex].text
   const ButtonContent = rotatingContents[currentContentIndex].ButtonContent
+  const buttonLink = config[rotatingContents[currentContentIndex].buttonLinkConfigKey]
   const switchContent = () => {
     setCurrentContentIndex((prevIndex) => (prevIndex + 1) % rotatingContents.length)
   }
@@ -187,7 +191,7 @@ export default function Home() {
     }
   }, [])
   const onButtonClick = () => {
-    console.log('onButtonClick') // TODO: Open link url from database in new tab
+    console.log(buttonLink) // TODO: Open link url from database in new tab
   }
 
   if (!isClient) return null
@@ -196,7 +200,7 @@ export default function Home() {
       <Container>
         <HeaderContainer>
           <FormLike
-            text="Takuma" // TODO: Get from database
+            text={config.name ?? ''}
             size="small"
             align="left"
             colorScheme={colorScheme}
