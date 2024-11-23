@@ -13,6 +13,7 @@ import Toggle, { SelectedSide } from "@/stories/Toggle";
 import { DarkModeSVG, LightModeSVG } from "./svg";
 import CenterContainer from "@/stories/CenterContainer";
 import { useServerSideData } from "./contexts/ServerSideData";
+import Link from "next/link";
 
 const Container = styled.div`
   display: flex;
@@ -190,9 +191,6 @@ export default function Home() {
       setCurrentTiming(_initTiming)
     }
   }, [])
-  const onButtonClick = () => {
-    console.log(buttonLink) // TODO: Open link url from database in new tab
-  }
 
   if (!isClient) return null
   return (
@@ -221,9 +219,13 @@ export default function Home() {
             fadeDuration={centerTextFadeDuration}
           />
           <FadeBox state={buttonState} mode="dissolve" fadeDuration={buttonFadeDuration}>
-            <Button colorScheme={colorScheme} onClick={onButtonClick} hidden={!isButtonEnabled}>
-              <ButtonContent colorScheme={colorScheme} />
-            </Button>
+            {buttonLink &&
+              <Link href={buttonLink} target="_blank">
+                <Button colorScheme={colorScheme} hidden={!isButtonEnabled}>
+                  <ButtonContent colorScheme={colorScheme} />
+                </Button>
+              </Link>
+            }
           </FadeBox>
         </CenterContainer>
       </Container>
