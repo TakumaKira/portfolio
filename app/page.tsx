@@ -12,6 +12,7 @@ import FormLike from "@/stories/FormLike";
 import Toggle, { SelectedSide } from "@/stories/Toggle";
 import { DarkModeSVG, LightModeSVG } from "./svg";
 import CenterContainer from "@/stories/CenterContainer";
+import { useServerSideData } from "./contexts/ServerSideData";
 
 const Container = styled.div`
   display: flex;
@@ -88,6 +89,9 @@ const rotatingContents = [
 ]
 
 export default function Home() {
+  const { config } = useServerSideData()
+  console.log(config)
+
   const { colorScheme, toggleColorScheme } = useColorSchemeControl()
   const [isClient, setIsClient] = React.useState(false)
   React.useEffect(() => {
