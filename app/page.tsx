@@ -14,6 +14,7 @@ import { DarkModeSVG, LightModeSVG } from "./svg";
 import CenterContainer from "@/stories/CenterContainer";
 import { useServerSideData } from "./contexts/ServerSideData";
 import Link from "next/link";
+import { ServerSideData } from "./lib/serverSideData";
 
 const Container = styled.div`
   display: flex;
@@ -70,6 +71,7 @@ const TIMINGS = {
   ]
 } as const
 
+const NAME_KEY = 'name'
 const rotatingContents = [
   {
     text: 'Frontend-Oriented',
@@ -95,6 +97,17 @@ const rotatingContents = [
 
 export default function Home() {
   const { config } = useServerSideData()
+  const checkConfig = (config: ServerSideData['config']) => {
+    const requiredKeys = [NAME_KEY, ...rotatingContents.map(({ buttonLinkConfigKey }) => buttonLinkConfigKey)]
+    const configKeys = Object.keys(config)
+    const missingKeys = requiredKeys.filter((key) => !configKeys.includes(key))
+    if (missingKeys.length > 0) {
+      console.error('Config is missing some required keys', { missingKeys, config })
+    }
+  }
+  React.useEffect(() => {
+    checkConfig(config)
+  }, [])
 
   const { colorScheme, toggleColorScheme } = useColorSchemeControl()
   const [isClient, setIsClient] = React.useState(false)
@@ -198,7 +211,7 @@ export default function Home() {
       <Container>
         <HeaderContainer>
           <FormLike
-            text={config.name ?? ''}
+            text={config[NAME_KEY] ?? ''}
             size="small"
             align="left"
             colorScheme={colorScheme}
