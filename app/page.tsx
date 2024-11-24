@@ -15,6 +15,8 @@ import CenterContainer from "@/stories/CenterContainer";
 import { useServerSideData } from "./contexts/ServerSideData";
 import Link from "next/link";
 import { ServerSideData } from "./lib/serverSideData";
+import TIMINGS from "./lib/timings";
+import onChangeCurrentTiming, { checkTimingsConfigSafety } from "./lib/onChangeCurrentTiming";
 
 const Container = styled.div`
   display: flex;
@@ -34,42 +36,6 @@ const HeaderContainer = styled.div`
   justify-content: space-between;
   align-items: center;
 `
-
-/**
- * Timinig chart
- * 
- *                  0  .  1  .  2  .  3  .  4  .  5  .  6  .  7  .  8  .  9  .  10  .  11  .  12  .  13  .  14  .  15
- * 
- * Page loaded:     1
- * 
- * Layout shown:    0  1
- * 
- * Title shown:     0     1
- * 
- * Switch content:  1                                            1                                           1
- * 
- * Center text:     H        I          (V)          O          (H) I           (V)            O            (H)
- * 
- * Button:          H                 I (V)                   O (H)          I  (V)                      O  (H)
- * 
- * Button enabled:  F                 T                          F           T                               F
- */
-const TIMINGS = {
-  init: [
-    { name: 'PAGE_LOADED', duration: 0, tillNext: 500 },
-    { name: 'LAYOUT_VISIBLE', duration: 500, tillNext: 500 },
-    { name: 'TITLE_VISIBLE', duration: 1000, tillNext: 500 },
-  ],
-  loop: [
-    { name: 'CENTER_TEXT_FADE_IN', duration: 2000, tillNext: 1500 },
-    { name: 'BUTTON_FADE_IN', duration: 500, tillNext: 0 },
-    { name: 'BUTTON_ENABLED', duration: 0, tillNext: 2500 },
-    { name: 'CENTER_TEXT_FADE_OUT', duration: 2000, tillNext: 1500 },
-    { name: 'BUTTON_FADE_OUT', duration: 500, tillNext: 500 },
-    { name: 'BUTTON_DISABLED', duration: 0, tillNext: 0 },
-    { name: 'SWITCH_CONTENT', duration: 0, tillNext: 500 },
-  ]
-} as const
 
 const NAME_KEY = 'name'
 const rotatingContents = [
@@ -131,6 +97,7 @@ export default function Home() {
   const switchContent = () => {
     setCurrentContentIndex((prevIndex) => (prevIndex + 1) % rotatingContents.length)
   }
+  const [currentTiming, setCurrentTiming] = React.useState<{ part: keyof typeof TIMINGS, index: number }>()
 
   const trigger = ({ name, duration }: (typeof TIMINGS.init)[number] | (typeof TIMINGS.loop)[number]) => {
     const actions: { [key in ((typeof TIMINGS.init) | (typeof TIMINGS.loop))[number]['name']]: () => void } = {
@@ -173,31 +140,14 @@ export default function Home() {
     }
     actions[name]()
   }
-
-  const safetyCheck = (timings: typeof TIMINGS) => {
-    const isLoopTotalZeroDuration = timings.loop.every(({ tillNext }) => tillNext <= 0)
-    if (isLoopTotalZeroDuration) {
-      throw new Error('Total zero loop duration is not allowed')
-    }
-  }
-  const [currentTiming, setCurrentTiming] = React.useState<{ part: keyof typeof TIMINGS, index: number }>()
   React.useEffect(() => {
     if (!currentTiming) {
       return
     }
-    trigger(TIMINGS[currentTiming.part][currentTiming.index])
-    setTimeout(() => {
-      const _nextTiming: { part: keyof typeof TIMINGS, index: number } = currentTiming.index < TIMINGS[currentTiming.part].length - 1
-        ? { part: currentTiming.part, index: currentTiming.index + 1 }
-        : { part: 'loop', index: 0 }
-      const _nextTimingObj = TIMINGS[_nextTiming.part][_nextTiming.index]
-      if (_nextTimingObj) {
-        setCurrentTiming(_nextTiming)
-      }
-    }, TIMINGS[currentTiming.part][currentTiming.index].tillNext)
+    onChangeCurrentTiming(TIMINGS, currentTiming, setCurrentTiming, trigger)
   }, [currentTiming])
   React.useEffect(() => {
-    safetyCheck(TIMINGS)
+    checkTimingsConfigSafety(TIMINGS)
     const _initTiming: { part: keyof typeof TIMINGS, index: number } = { part: TIMINGS.init.length > 0 ? 'init' : 'loop', index: 0 }
     const _initTimingObj = TIMINGS[_initTiming.part][_initTiming.index]
     if (_initTimingObj) {
