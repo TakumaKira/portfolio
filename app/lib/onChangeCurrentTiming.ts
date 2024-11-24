@@ -17,3 +17,10 @@ export default function onChangeCurrentTiming(
     }
   }, timings[currentTiming.part][currentTiming.index].tillNext)
 }
+
+export const checkTimingsConfigSafety = (timings: typeof TIMINGS) => {
+  const isLoopTotalZeroDuration = timings.loop.every(({ tillNext }) => tillNext <= 0)
+  if (isLoopTotalZeroDuration) {
+    throw new Error('Total zero loop duration is not allowed')
+  }
+}

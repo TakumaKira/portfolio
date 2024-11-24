@@ -16,7 +16,7 @@ import { useServerSideData } from "./contexts/ServerSideData";
 import Link from "next/link";
 import { ServerSideData } from "./lib/serverSideData";
 import TIMINGS from "./lib/timings";
-import onChangeCurrentTiming from "./lib/onChangeCurrentTiming";
+import onChangeCurrentTiming, { checkTimingsConfigSafety } from "./lib/onChangeCurrentTiming";
 
 const Container = styled.div`
   display: flex;
@@ -146,14 +146,8 @@ export default function Home() {
     }
     onChangeCurrentTiming(TIMINGS, currentTiming, setCurrentTiming, trigger)
   }, [currentTiming])
-  const safetyCheck = (timings: typeof TIMINGS) => {
-    const isLoopTotalZeroDuration = timings.loop.every(({ tillNext }) => tillNext <= 0)
-    if (isLoopTotalZeroDuration) {
-      throw new Error('Total zero loop duration is not allowed')
-    }
-  }
   React.useEffect(() => {
-    safetyCheck(TIMINGS)
+    checkTimingsConfigSafety(TIMINGS)
     const _initTiming: { part: keyof typeof TIMINGS, index: number } = { part: TIMINGS.init.length > 0 ? 'init' : 'loop', index: 0 }
     const _initTimingObj = TIMINGS[_initTiming.part][_initTiming.index]
     if (_initTimingObj) {
