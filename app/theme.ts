@@ -42,8 +42,8 @@ export const projectTheme = {
   colorTransitionDuration: 0.2,
   shadows: {
     buttonInverse: {
-      light: '1px 1px 1px 1px #48484840',
-      dark: '1px 1px 1px 1px #21201D59',
+      light: '0px 0px 1px 1px #48484840',
+      dark: '0px 0px 1px 1px #21201D59',
     },
     toggleKnob: {
       light: '0px 0px 2px 0px #5048208c',
