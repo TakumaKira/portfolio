@@ -4,6 +4,15 @@ import fonts from './fonts'
 // import { getServerSideData } from "./lib/serverSideData";
 import ServerSideDataProvider from "./contexts/ServerSideData";
 
+import type { Schema } from "../amplify/data/resource"
+import { Amplify } from "aws-amplify"
+import { generateClient } from "aws-amplify/api"
+import outputs from "../amplify_outputs.json"
+
+Amplify.configure(outputs)
+
+const client = generateClient<Schema>()
+
 const fontClasses = Object.values(fonts).map(({ variable }) => variable).join(' ');
 
 export const metadata: Metadata = {
@@ -17,6 +26,10 @@ export default async function RootLayout({
 }>) {
   // const { config } = await getServerSideData()
   const config = {}
+  const res = await client.queries.sayHello({
+    name: "Amplify",
+  })
+  console.log(res)
   return (
     <html lang="en">
       <body className={fontClasses}>
