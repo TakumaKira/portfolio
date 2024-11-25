@@ -14,12 +14,15 @@
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
+    "aws-amplify": "^6.9.0",
     "next": "14.2.17",
     "react": "^18",
     "react-dom": "^18",
     "styled-components": "^6.1.13"
   },
   "devDependencies": {
+    "@aws-amplify/backend": "^1.8.0",
+    "@aws-amplify/backend-cli": "^1.4.2",
     "@chromatic-com/storybook": "^3.2.2",
     "@storybook/addon-essentials": "^8.4.2",
     "@storybook/addon-interactions": "^8.4.2",
@@ -36,6 +39,10 @@
     "@types/react-dom": "^18",
     "@vitejs/plugin-react": "^4.3.3",
     "@vitest/ui": "2.1.5",
+    "aws-cdk": "^2",
+    "aws-cdk-lib": "^2",
+    "constructs": "^10.0.0",
+    "esbuild": "^0.24.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.17",
     "eslint-plugin-storybook": "^0.11.0",
@@ -43,7 +50,8 @@
     "prisma": "^5.22.0",
     "sass": "^1.80.6",
     "storybook": "^8.4.2",
-    "typescript": "^5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
     "vitest": "^2.1.5"
   }
 }
