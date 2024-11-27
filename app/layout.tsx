@@ -10,8 +10,9 @@ import outputs from "../amplify_outputs.json"
 import { generateClient } from "aws-amplify/api"
 
 // console.log(Amplify.getConfig())
+console.log(outputs)
 Amplify.configure(outputs)
-// console.log(Amplify.getConfig())
+console.log(Amplify.getConfig())
 
 const client = generateClient<Schema>()
 
