@@ -6,10 +6,12 @@ import ServerSideDataProvider from "./contexts/ServerSideData";
 
 import type { Schema } from "../amplify/data/resource"
 import { Amplify } from "aws-amplify"
-import { generateClient } from "aws-amplify/api"
 import outputs from "../amplify_outputs.json"
+import { generateClient } from "aws-amplify/api"
 
+// console.log(Amplify.getConfig())
 Amplify.configure(outputs)
+// console.log(Amplify.getConfig())
 
 const client = generateClient<Schema>()
 
@@ -26,10 +28,11 @@ export default async function RootLayout({
 }>) {
   // const { config } = await getServerSideData()
   const config = {}
-  const res = await client.queries.sayHello({
-    name: "Amplify",
-  })
-  console.log(res)
+  console.log(client)
+  // const res = await client.queries.sayHello({
+  //   name: "Amplify",
+  // })
+  // console.log(res)
   return (
     <html lang="en">
       <body className={fontClasses}>

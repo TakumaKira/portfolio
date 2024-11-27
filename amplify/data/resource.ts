@@ -11,6 +11,8 @@ const schema = a.schema({
     .handler(a.handler.function(sayHello)),
 })
 
+// console.log(schema)
+
 export type Schema = ClientSchema<typeof schema>
 
 export const data = defineData({

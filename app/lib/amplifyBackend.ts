@@ -1,12 +1,12 @@
-import type { Schema } from "../../amplify/data/resource"
-import { Amplify } from "aws-amplify"
-import { generateClient } from "aws-amplify/api"
-import outputs from "../../amplify_outputs.json"
+// import type { Schema } from "../../amplify/data/resource"
+// import { Amplify } from "aws-amplify"
+// import { generateClient } from "aws-amplify/api"
+// import outputs from "../../amplify_outputs.json"
 
-Amplify.configure(outputs)
+// Amplify.configure(outputs)
 
-const client = generateClient<Schema>()
+// const client = generateClient<Schema>()
 
-client.queries.sayHello({
-  name: "Amplify",
-})
+// client.queries.sayHello({
+//   name: "Amplify",
+// })
