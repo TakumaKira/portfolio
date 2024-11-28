@@ -9,10 +9,7 @@ import { Amplify } from "aws-amplify"
 import outputs from "../amplify_outputs.json"
 import { generateClient } from "aws-amplify/api"
 
-// console.log(Amplify.getConfig())
-console.log(outputs)
 Amplify.configure(outputs)
-console.log(Amplify.getConfig())
 
 const client = generateClient<Schema>()
 
@@ -29,10 +26,11 @@ export default async function RootLayout({
 }>) {
   // const { config } = await getServerSideData()
   const config = {}
-  console.log(client)
-  const res = await client.queries.sayHello({
-    name: "Amplify",
-  })
+  // console.log(client)
+  // const res = await client.queries.sayHello({
+  //   name: "Amplify",
+  // })
+  const res = await client.queries.getDbData()
   console.log(res)
   return (
     <html lang="en">
