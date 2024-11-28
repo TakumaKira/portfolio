@@ -8,10 +8,9 @@ const schema = a.schema({
       name: a.string(),
     })
     .returns(a.string())
+    .authorization((allow) => [allow.guest()])
     .handler(a.handler.function(sayHello)),
 })
-
-// console.log(schema)
 
 export type Schema = ClientSchema<typeof schema>
 

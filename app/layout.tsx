@@ -30,10 +30,10 @@ export default async function RootLayout({
   // const { config } = await getServerSideData()
   const config = {}
   console.log(client)
-  // const res = await client.queries.sayHello({
-  //   name: "Amplify",
-  // })
-  // console.log(res)
+  const res = await client.queries.sayHello({
+    name: "Amplify",
+  })
+  console.log(res)
   return (
     <html lang="en">
       <body className={fontClasses}>
