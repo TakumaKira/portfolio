@@ -35,6 +35,10 @@ const nextConfig = {
 
     return config
   },
+  experimental: {
+    serverActions: true,
+    optimizePackageImports: ['@prisma/client'],
+  },
 };
 
 export default nextConfig;
