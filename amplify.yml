@@ -12,7 +12,7 @@ backend:
         - ls ./node_modules/.prisma/client
         - cd ..
         - mkdir -p nodejs/node_modules/portfolio-prisma
-        - cp -r prisma nodejs/node_modules/portfolio-prisma
+        - cp -r prisma/* nodejs/node_modules/portfolio-prisma/
         - ls nodejs/node_modules/portfolio-prisma
         - zip -r portfolio-prisma.zip nodejs
         - aws lambda publish-layer-version --layer-name portfolio-prisma --zip-file fileb://portfolio-prisma.zip
