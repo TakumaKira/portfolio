@@ -25,12 +25,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const { data } = await client.queries.getDbData()
-  console.log('data on layout', data)
-  console.log("data !== null", data !== null)
-  console.log("data !== null && typeof data === 'object'", data !== null && typeof data === 'object')
-  console.log("typeof data", typeof data)
-  console.log("data !== null && typeof data === 'object' && 'config' in data", data !== null && typeof data === 'object' && 'config' in data)
-  const config = data !== null && typeof data === 'object' && 'config' in data ? data.config as Config : {}
+  const config = data !== null && typeof data === 'string' ? JSON.parse(data).config as Config : {}
   console.log('config on layout', config)
   return (
     <html lang="en">
