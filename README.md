@@ -55,7 +55,7 @@ CREATE DATABASE portfolio;
 Migrate the schema to the postgres database using prisma cli.
 
 ```bash
-CONFIG_DATABASE_URL=postgresql://postgres:password@localhost:5432/portfolio pnpm dlx prisma migrate deploy
+CONFIG_DATABASE_URL=postgresql://postgres:password@localhost:5432/portfolio npx prisma migrate deploy
 ```
 
 Now you have a database works for this project.

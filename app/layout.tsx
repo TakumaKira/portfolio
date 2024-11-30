@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import StyledComponentsRegistry from './lib/registry'
 import fonts from './fonts'
-// import { getServerSideData } from "./lib/serverSideData";
 import ServerSideDataProvider from "./contexts/ServerSideData";
 
 import type { Schema } from "../amplify/data/resource"
 import { Amplify } from "aws-amplify"
 import outputs from "../amplify_outputs.json"
 import { generateClient } from "aws-amplify/api"
+import { Config } from "./lib/serverSideData"
 
 Amplify.configure(outputs)
 
@@ -24,18 +24,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const { config } = await getServerSideData()
-  const config = {}
-  // console.log(client)
-  // const res = await client.queries.sayHello({
-  //   name: "Amplify",
-  // })
-  const res = await client.queries.getDbData()
-  console.log(res)
+  const { data } = await client.queries.getDbData()
   return (
     <html lang="en">
       <body className={fontClasses}>
-        <ServerSideDataProvider config={config}>
+        <ServerSideDataProvider config={data !== null && typeof data === 'object' && 'config' in data ? data.config as Config : {}}>
           <StyledComponentsRegistry>
             {children}
           </StyledComponentsRegistry>

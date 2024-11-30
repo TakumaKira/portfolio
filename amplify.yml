@@ -28,9 +28,11 @@ frontend:
         - npm ci --cache .npm --prefer-offline
         - npx prisma && npx prisma generate
         - ls ./node_modules/.prisma/client
-        # Install frontend dependencies
         - cd ..
+        # Install frontend dependencies
         - npm install
+        # TODO: Add an environment variable AFTER prisma generate to muting the error on runtime spinup
+        # - echo 'PRISMA_QUERY_ENGINE_LIBRARY=./node_modules/portfolio-prisma/node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node' >> .env
     test:
       commands:
         - npm run test:ci
