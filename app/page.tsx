@@ -63,6 +63,7 @@ const rotatingContents = [
 
 export default function Home() {
   const { config } = useServerSideData()
+  console.log('config on page', config)
   const checkConfig = (config: ServerSideData['config']) => {
     const requiredKeys = [NAME_KEY, ...rotatingContents.map(({ buttonLinkConfigKey }) => buttonLinkConfigKey)]
     const configKeys = Object.keys(config)

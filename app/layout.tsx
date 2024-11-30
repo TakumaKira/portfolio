@@ -25,10 +25,13 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const { data } = await client.queries.getDbData()
+  console.log('data on layout', data)
+  const config = data !== null && typeof data === 'object' && 'config' in data ? data.config as Config : {}
+  console.log('config on layout', config)
   return (
     <html lang="en">
       <body className={fontClasses}>
-        <ServerSideDataProvider config={data !== null && typeof data === 'object' && 'config' in data ? data.config as Config : {}}>
+        <ServerSideDataProvider config={config}>
           <StyledComponentsRegistry>
             {children}
           </StyledComponentsRegistry>
