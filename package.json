@@ -13,9 +13,9 @@
     "test:ci": "vitest run"
   },
   "dependencies": {
-    "@prisma/client": "^5.22.0",
     "aws-amplify": "^6.9.0",
     "next": "14.2.17",
+    "portfolio-prisma": "file:prisma",
     "react": "^18",
     "react-dom": "^18",
     "styled-components": "^6.1.13"
@@ -48,7 +48,6 @@
     "eslint-config-next": "14.2.17",
     "eslint-plugin-storybook": "^0.11.0",
     "jsdom": "^25.0.1",
-    "prisma": "^5.22.0",
     "sass": "^1.80.6",
     "storybook": "^8.4.2",
     "tsx": "^4.19.2",
