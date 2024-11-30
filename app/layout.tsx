@@ -28,6 +28,7 @@ export default async function RootLayout({
   console.log('data on layout', data)
   console.log("data !== null", data !== null)
   console.log("data !== null && typeof data === 'object'", data !== null && typeof data === 'object')
+  console.log("typeof data", typeof data)
   console.log("data !== null && typeof data === 'object' && 'config' in data", data !== null && typeof data === 'object' && 'config' in data)
   const config = data !== null && typeof data === 'object' && 'config' in data ? data.config as Config : {}
   console.log('config on layout', config)
