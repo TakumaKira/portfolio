@@ -75,8 +75,12 @@ INSERT INTO "public"."Config" ("id", "name", "type", "value") VALUES
 
 ### Run Next.js
 
-Finally, run the Next.js application. Next.js server requires the database url to connect to the database. You can run the production server by providing the production database url, which is reachable from the Next.js server instance.
+```bash
+npm run dev
+```
+
+### Run Amplify backend functions sandbox for development
 
 ```bash
-CONFIG_DATABASE_URL=postgresql://postgres:password@localhost:5432/portfolio pnpm dev
+PRISMA_LAMBDA_LAYER_ARN=arn:aws:lambda:<your-resource-region>:<your-aws-account-number>:layer:portfolio-prisma:<latest-lambda-layer-version-number> npx ampx sandbox
 ```
