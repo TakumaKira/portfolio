@@ -35,7 +35,7 @@ jobs:
           
       - name: Deploy to S3
         run: |
-          aws s3 sync storybook-static s3://${{ vars.AWS_S3_BUCKET }}/${{ vars.AWS_S3_STORYBOOK_OBJECT_KEY }} --delete
+          aws s3 sync storybook-static s3://${{ vars.AWS_S3_BUCKET }} --delete
         
       # - name: Invalidate CloudFront (if using CloudFront)
       #   if: github.ref == 'refs/heads/main'  # only on main branch in case this action is set to run on other branches
