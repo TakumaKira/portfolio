@@ -3,17 +3,14 @@ backend:
   phases:
     build:
       commands:
+        - echo "Using amplify.yml on repository root"
         # Deploy prisma layer as a lambda layer
-        - ls
-        - rm -rf node_modules
         - cd prisma
         - npm ci --cache .npm --prefer-offline
         - npx prisma && npx prisma generate
-        - ls ./node_modules/.prisma/client
         - cd ..
         - mkdir -p nodejs/node_modules/portfolio-prisma
         - cp -r prisma/* nodejs/node_modules/portfolio-prisma/
-        - ls nodejs/node_modules/portfolio-prisma
         - zip -r portfolio-prisma.zip nodejs
         - aws lambda publish-layer-version --layer-name portfolio-prisma --zip-file fileb://portfolio-prisma.zip
         # Deploy backend
@@ -27,12 +24,10 @@ frontend:
         - cd prisma
         - npm ci --cache .npm --prefer-offline
         - npx prisma && npx prisma generate
-        - ls ./node_modules/.prisma/client
         - cd ..
         # Install frontend dependencies
         - npm install
         # TODO: Add an environment variable AFTER prisma generate to muting the error on runtime spinup
-        # - echo 'PRISMA_QUERY_ENGINE_LIBRARY=./node_modules/portfolio-prisma/node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node' >> .env
     test:
       commands:
         - npm run test:ci

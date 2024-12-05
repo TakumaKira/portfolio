@@ -37,7 +37,7 @@ jobs:
         run: |
           aws s3 sync storybook-static s3://${{ vars.AWS_S3_BUCKET }} --delete
         
-      # - name: Invalidate CloudFront (if using CloudFront)
-      #   if: github.ref == 'refs/heads/main'  # only on main branch in case this action is set to run on other branches
-      #   run: |
-      #     aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/portfolio-storybook/*"
+      - name: Invalidate CloudFront
+        if: github.ref == 'refs/heads/main'  # only on main branch in case this action is set to run on other branches
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}

@@ -14,7 +14,7 @@ import { DarkModeSVG, LightModeSVG } from "./svg";
 import CenterContainer from "@/stories/CenterContainer";
 import { useServerSideData } from "./contexts/ServerSideData";
 import Link from "next/link";
-import { ServerSideData } from "./lib/serverSideData";
+import { ServerSideData } from "./contexts/ServerSideData";
 import TIMINGS from "./lib/timings";
 import onChangeCurrentTiming, { checkTimingsConfigSafety } from "./lib/onChangeCurrentTiming";
 
@@ -63,7 +63,6 @@ const rotatingContents = [
 
 export default function Home() {
   const { config } = useServerSideData()
-  console.log('config on page', config)
   const checkConfig = (config: ServerSideData['config']) => {
     const requiredKeys = [NAME_KEY, ...rotatingContents.map(({ buttonLinkConfigKey }) => buttonLinkConfigKey)]
     const configKeys = Object.keys(config)

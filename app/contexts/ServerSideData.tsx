@@ -1,7 +1,19 @@
 'use client'
 
 import React from "react";
-import { ServerSideData, initServerSideData } from "../lib/serverSideData"
+
+import { PrismaClient } from 'portfolio-prisma'
+
+type ConfigEntity = Awaited<ReturnType<PrismaClient['config']['findMany']>>[number]
+type Config = {
+  [key in ConfigEntity['name']]: ConfigEntity['value']
+}
+export type ServerSideData = {
+  config: Config
+}
+const initServerSideData: ServerSideData = {
+  config: {},
+}
 
 const ServerSideDataContext = React.createContext<ServerSideData>(initServerSideData)
 

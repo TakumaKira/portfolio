@@ -1,4 +1,0 @@
-Loader:
-  - .prisma=file
-  - .so.node=file
-AssetNames: '[name]'
