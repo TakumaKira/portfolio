@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import StyledComponentsRegistry from './lib/registry'
 import fonts from './fonts'
-import ServerSideDataProvider from "./contexts/ServerSideData";
+import ServerSideDataProvider, { Config } from "./contexts/ServerSideData";
 
 import type { Schema } from "../amplify/data/resource"
 import { Amplify } from "aws-amplify"
 import outputs from "../amplify_outputs.json"
 import { generateClient } from "aws-amplify/api"
-import { Config } from "./lib/serverSideData"
 
 Amplify.configure(outputs)
 

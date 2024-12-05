@@ -5,7 +5,7 @@ import React from "react";
 import { PrismaClient } from 'portfolio-prisma'
 
 type ConfigEntity = Awaited<ReturnType<PrismaClient['config']['findMany']>>[number]
-type Config = {
+export type Config = {
   [key in ConfigEntity['name']]: ConfigEntity['value']
 }
 export type ServerSideData = {
