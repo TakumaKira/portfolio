@@ -25,7 +25,6 @@ export default async function RootLayout({
 }>) {
   const { data } = await client.queries.getDbData()
   const config = data !== null && typeof data === 'string' ? JSON.parse(data).config as Config : {}
-  console.log('config on layout', config)
   return (
     <html lang="en">
       <body className={fontClasses}>
