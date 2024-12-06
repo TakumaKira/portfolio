@@ -4,6 +4,8 @@
 
 This project uses postgres database. By getting some config data from the database, I as a maintainer can manage some of the contents without modifying the source code and redeploying the application. I leverage Server Component to let Next.js server get the config data directly from the database and render it on the page. These config data are embedded in the HTML as a script tag and no API calls happen on the client side, which is more secure than using normal API.
 
+![Architecture](./Takuma's_portfolio_architecture.gif)
+
 I use npm as package manager for this project, because it works well in any case including CIs.
 
 ### Install prisma cli
