@@ -24,6 +24,9 @@ jobs:
         
       - name: Build Storybook
         run: npm run build-storybook
+
+      - name: Fix permission
+        run: chmod -R 777 storybook-static
         
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -31,10 +34,9 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.AWS_REGION }}
-          
+      
       - name: Deploy to S3
         run: |
-          chmod -R 777 storybook-static
           aws s3 sync storybook-static s3://${{ vars.AWS_S3_BUCKET }} --delete --debug
         
       - name: Invalidate CloudFront
