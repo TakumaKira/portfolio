@@ -23,7 +23,10 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
+  @supports (min-height: 100dvh) {
+    min-height: 100dvh;
+  }
 `
 const HeaderContainer = styled.div`
   position: absolute;
