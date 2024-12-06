@@ -27,7 +27,6 @@ frontend:
         - cd ..
         # Install frontend dependencies
         - npm install
-        # TODO: Add an environment variable AFTER prisma generate to muting the error on runtime spinup
     test:
       commands:
         - npm run test:ci
