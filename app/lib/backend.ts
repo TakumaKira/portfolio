@@ -10,5 +10,5 @@ const client = generateClient<Schema>()
 
 export async function getData(): Promise<ServerSideData> {
   const { data } = await client.queries.getDbData()
-  return data !== null && typeof data === 'string' ? JSON.parse(data) : {}
+  return data !== null && typeof data === 'string' ? JSON.parse(data) : { config: {} }
 }

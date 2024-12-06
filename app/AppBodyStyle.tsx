@@ -6,6 +6,9 @@ const AppBodyStyle = createGlobalStyle<{ $colorScheme: ColorScheme }>`
   body {
     min-width: 100vw;
     min-height: 100vh;
+    @supports (min-height: 100dvh) {
+      min-height: 100dvh;
+    }
   }
   body {
     background-color: ${props => (props.theme as ProjectTheme)?.colors.surfacePrimary[props.$colorScheme]};
