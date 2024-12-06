@@ -1,95 +1,197 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client'
+
+import React from "react";
+import styled from "styled-components";
+
+import MainMessage from "@/stories/MainMessage";
+import { useColorSchemeControl } from "./contexts/ColorSchemeControl";
+import Button from "@/stories/Button";
+import { ButtonContentArchitectureAware, ButtonContentComponentDriven, ButtonContentDesignAware, ButtonContentFrontendOriented } from "@/stories/ButtonContent";
+import FadeBox, { FadeState } from "@/stories/FadeBox";
+import FormLike from "@/stories/FormLike";
+import Toggle, { SelectedSide } from "@/stories/Toggle";
+import { DarkModeSVG, LightModeSVG } from "./svg";
+import CenterContainer from "@/stories/CenterContainer";
+import { useServerSideData } from "./contexts/ServerSideData";
+import Link from "next/link";
+import { ServerSideData } from "./contexts/ServerSideData";
+import TIMINGS from "./lib/timings";
+import onChangeCurrentTiming, { checkTimingsConfigSafety } from "./lib/onChangeCurrentTiming";
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+`
+const HeaderContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 4rem;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
+
+const NAME_KEY = 'name'
+const rotatingContents = [
+  {
+    text: 'Frontend-Oriented',
+    ButtonContent: ButtonContentFrontendOriented,
+    buttonLinkConfigKey: 'repository_url',
+  },
+  {
+    text: 'Component-Driven',
+    ButtonContent: ButtonContentComponentDriven,
+    buttonLinkConfigKey: 'storybook_url',
+  },
+  {
+    text: 'Architecture-Aware',
+    ButtonContent: ButtonContentArchitectureAware,
+    buttonLinkConfigKey: 'cpsaf_certification_url',
+  },
+  {
+    text: 'Design-Aware',
+    ButtonContent: ButtonContentDesignAware,
+    buttonLinkConfigKey: 'figma_url',
+  },
+]
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const { config } = useServerSideData()
+  const checkConfig = (config: ServerSideData['config']) => {
+    const requiredKeys = [NAME_KEY, ...rotatingContents.map(({ buttonLinkConfigKey }) => buttonLinkConfigKey)]
+    const configKeys = Object.keys(config)
+    const missingKeys = requiredKeys.filter((key) => !configKeys.includes(key))
+    if (missingKeys.length > 0) {
+      console.error('Config is missing some required keys', { missingKeys, config })
+    }
+  }
+  React.useEffect(() => {
+    checkConfig(config)
+  }, [])
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+  const { colorScheme, toggleColorScheme } = useColorSchemeControl()
+  const [isClient, setIsClient] = React.useState(false)
+  React.useEffect(() => {
+    setIsClient(true)
+  }, [colorScheme])
+
+  const [layoutState, setLayoutState] = React.useState(FadeState.HIDDEN)
+  const [layoutFadeDuration, setLayoutFadeDuration] = React.useState(0)
+  const [titleTextState, setTitleTextState] = React.useState(FadeState.HIDDEN)
+  const [titleTextFadeDuration, setTitleTextFadeDuration] = React.useState(0)
+  const [centerTextState, setCenterTextState] = React.useState(FadeState.HIDDEN)
+  const [centerTextFadeDuration, setCenterTextFadeDuration] = React.useState(0)
+  const [buttonState, setButtonState] = React.useState(FadeState.HIDDEN)
+  const [buttonFadeDuration, setButtonFadeDuration] = React.useState(0)
+  const [isButtonEnabled, setIsButtonEnabled] = React.useState(false)
+  const [currentContentIndex, setCurrentContentIndex] = React.useState(0)
+  const centerText = rotatingContents[currentContentIndex].text
+  const ButtonContent = rotatingContents[currentContentIndex].ButtonContent
+  const buttonLink = config[rotatingContents[currentContentIndex].buttonLinkConfigKey]
+  const switchContent = () => {
+    setCurrentContentIndex((prevIndex) => (prevIndex + 1) % rotatingContents.length)
+  }
+  const [currentTiming, setCurrentTiming] = React.useState<{ part: keyof typeof TIMINGS, index: number }>()
+
+  const trigger = ({ name, duration }: (typeof TIMINGS.init)[number] | (typeof TIMINGS.loop)[number]) => {
+    const actions: { [key in ((typeof TIMINGS.init) | (typeof TIMINGS.loop))[number]['name']]: () => void } = {
+      // init
+      PAGE_LOADED: () => {},
+      LAYOUT_VISIBLE: () => {
+        setLayoutState(FadeState.FADING_IN)
+        setLayoutFadeDuration(duration)
+      },
+      TITLE_VISIBLE: () => {
+        setTitleTextState(FadeState.FADING_IN)
+        setTitleTextFadeDuration(duration)
+      },
+      // loop
+      CENTER_TEXT_FADE_IN: () => {
+        setCenterTextState(FadeState.FADING_IN)
+        setCenterTextFadeDuration(duration)
+      },
+      CENTER_TEXT_FADE_OUT: () => {
+        setCenterTextState(FadeState.FADING_OUT)
+        setCenterTextFadeDuration(duration)
+      },
+      BUTTON_FADE_IN: () => {
+        setButtonState(FadeState.FADING_IN)
+        setButtonFadeDuration(duration)
+      },
+      BUTTON_FADE_OUT: () => {
+        setButtonState(FadeState.FADING_OUT)
+        setButtonFadeDuration(duration)
+      },
+      BUTTON_ENABLED: () => {
+        setIsButtonEnabled(true)
+      },
+      BUTTON_DISABLED: () => {
+        setIsButtonEnabled(false)
+      },
+      SWITCH_CONTENT: () => {
+        switchContent()
+      },
+    }
+    actions[name]()
+  }
+  React.useEffect(() => {
+    if (!currentTiming) {
+      return
+    }
+    onChangeCurrentTiming(TIMINGS, currentTiming, setCurrentTiming, trigger)
+  }, [currentTiming])
+  React.useEffect(() => {
+    checkTimingsConfigSafety(TIMINGS)
+    const _initTiming: { part: keyof typeof TIMINGS, index: number } = { part: TIMINGS.init.length > 0 ? 'init' : 'loop', index: 0 }
+    const _initTimingObj = TIMINGS[_initTiming.part][_initTiming.index]
+    if (_initTimingObj) {
+      setCurrentTiming(_initTiming)
+    }
+  }, [])
+
+  if (!isClient) return null
+  return (
+    <FadeBox state={layoutState} mode="dissolve" fadeDuration={layoutFadeDuration}>
+      <Container>
+        <HeaderContainer>
+          <FormLike
+            text={config[NAME_KEY] ?? ''}
+            size="small"
+            align="left"
+            colorScheme={colorScheme}
+            state={titleTextState}
+            fadeDuration={titleTextFadeDuration}
           />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
+          <Toggle
+            items={{ left: { Icon: LightModeSVG }, right: { Icon: DarkModeSVG } }}
+            selectedSide={{ light: 'left', dark: 'right' }[colorScheme] as SelectedSide}
+            colorScheme={colorScheme} onToggle={toggleColorScheme}
           />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
+        </HeaderContainer>
+        <CenterContainer>
+          <MainMessage
+            centerText={centerText}
+            colorScheme={colorScheme}
+            centerTextState={centerTextState}
+            fadeDuration={centerTextFadeDuration}
           />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          <FadeBox state={buttonState} mode="dissolve" fadeDuration={buttonFadeDuration}>
+            {buttonLink &&
+              <Link href={buttonLink} target="_blank">
+                <Button colorScheme={colorScheme} hidden={!isButtonEnabled}>
+                  <ButtonContent colorScheme={colorScheme} />
+                </Button>
+              </Link>
+            }
+          </FadeBox>
+        </CenterContainer>
+      </Container>
+    </FadeBox>
   );
 }

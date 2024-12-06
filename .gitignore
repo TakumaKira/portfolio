@@ -34,3 +34,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+*storybook.log
+
+# amplify
+.amplify
+amplify_outputs*
+amplifyconfiguration*
+
+# misc
+memo.txt
