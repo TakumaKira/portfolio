@@ -34,7 +34,7 @@ jobs:
           
       - name: Deploy to S3
         run: |
-          chmod -R 777 /storybook-static
+          chmod -R 777 storybook-static
           aws s3 sync storybook-static s3://${{ vars.AWS_S3_BUCKET }} --delete --debug
         
       - name: Invalidate CloudFront
