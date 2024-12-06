@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - feature/setup-ci-test-and-deploy # TODO: remove this after testing
   workflow_dispatch:
 
 jobs:
