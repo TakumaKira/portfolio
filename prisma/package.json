@@ -1,0 +1,14 @@
+{
+  "name": "portfolio-prisma",
+  "version": "1.0.0",
+  "main": "node_modules/.prisma/client",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@prisma/client": "^5.22.0"
+  }
+}

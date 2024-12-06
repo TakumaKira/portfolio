@@ -36,3 +36,11 @@ yarn-error.log*
 next-env.d.ts
 
 *storybook.log
+
+# amplify
+.amplify
+amplify_outputs*
+amplifyconfiguration*
+
+# misc
+memo.txt
