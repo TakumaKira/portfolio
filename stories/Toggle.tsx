@@ -14,34 +14,59 @@ type ToggleItems = {
 const Container = styled.div<{ $colorScheme: ColorScheme }>`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.35rem;
 `
+const TOGGLE_BG_HEIGHT_DEFAULT = 19
+const TOGGLE_BG_WIDTH_DEFAULT = 38
+const TOGGLE_KNOB_SIZE_DEFAULT = 13
+const TOGGLE_BG_HEIGHT_MOBILE = 18
+const TOGGLE_BG_WIDTH_MOBILE = 34
+const TOGGLE_KNOB_SIZE_MOBILE = 12
 const ToggleUI = styled.div<{ $colorScheme: ColorScheme, $toggleDuration: number, $selectedSide: SelectedSide }>`
-  height: 1.5rem;
-  width: ${50 / 16}rem;
-  border-radius: ${1.5 / 2}rem;
+  height: ${({ theme }) => TOGGLE_BG_HEIGHT_DEFAULT / (theme as ProjectTheme).rootFontSize.default}rem;
+  width: ${({ theme }) => TOGGLE_BG_WIDTH_DEFAULT / (theme as ProjectTheme).rootFontSize.default}rem;
+  border-radius: ${({ theme }) => TOGGLE_BG_HEIGHT_DEFAULT / (theme as ProjectTheme).rootFontSize.default / 2}rem;
+  @media (max-width: ${({ theme }) => (theme as ProjectTheme).breakPoints.minWidthTablet - 1}px) {
+    height: ${({ theme }) => TOGGLE_BG_HEIGHT_MOBILE / (theme as ProjectTheme).rootFontSize.mobile}rem;
+    width: ${({ theme }) => TOGGLE_BG_WIDTH_MOBILE / (theme as ProjectTheme).rootFontSize.mobile}rem;
+    border-radius: ${({ theme }) => TOGGLE_BG_HEIGHT_MOBILE / (theme as ProjectTheme).rootFontSize.mobile / 2}rem;
+  }
   background-color: ${({ $colorScheme, theme }) => (theme as ProjectTheme).colors.toggleBg[$colorScheme]};
   position: relative;
   &::before {
     position: absolute;
     content: "";
-    height: ${18 / 16}rem;
-    width: ${18 / 16}rem;
-    border-radius: ${18 / 16 / 2}rem;
+    height: ${({ theme }) => TOGGLE_KNOB_SIZE_DEFAULT / (theme as ProjectTheme).rootFontSize.default}rem;
+    width: ${({ theme }) => TOGGLE_KNOB_SIZE_DEFAULT / (theme as ProjectTheme).rootFontSize.default}rem;
+    border-radius: ${({ theme }) => TOGGLE_KNOB_SIZE_DEFAULT / (theme as ProjectTheme).rootFontSize.default / 2}rem;
+    left: ${({ theme, $selectedSide }) => $selectedSide === 'left' ? 3 / (theme as ProjectTheme).rootFontSize.default : (TOGGLE_BG_WIDTH_DEFAULT - TOGGLE_KNOB_SIZE_DEFAULT - 3) / (theme as ProjectTheme).rootFontSize.default}rem;
+    @media (max-width: ${({ theme }) => (theme as ProjectTheme).breakPoints.minWidthTablet - 1}px) {
+      height: ${({ theme }) => TOGGLE_KNOB_SIZE_MOBILE / (theme as ProjectTheme).rootFontSize.mobile}rem;
+      width: ${({ theme }) => TOGGLE_KNOB_SIZE_MOBILE / (theme as ProjectTheme).rootFontSize.mobile}rem;
+      border-radius: ${({ theme }) => TOGGLE_KNOB_SIZE_MOBILE / (theme as ProjectTheme).rootFontSize.mobile / 2}rem;
+      left: ${({ theme, $selectedSide }) => $selectedSide === 'left' ? 3 / (theme as ProjectTheme).rootFontSize.mobile : (TOGGLE_BG_WIDTH_MOBILE - TOGGLE_KNOB_SIZE_MOBILE - 3) / (theme as ProjectTheme).rootFontSize.mobile}rem;
+    }
     background-color: ${({ $colorScheme, theme }) => (theme as ProjectTheme).colors.toggleKnob[$colorScheme]};
     box-shadow: ${({ $colorScheme, theme }) => (theme as ProjectTheme).shadows.toggleKnob[$colorScheme]};
     top: 50%;
     transform: translateY(-50%);
-    left: ${({ $selectedSide }) => $selectedSide === 'left' ? 3 / 16 : (50 - 3 - 18) / 16}rem;
     transition: left ${({ $toggleDuration }) => $toggleDuration}ms ease-in-out;
   }
 `
 const IconWrapper = styled.div<{ $colorScheme: ColorScheme }>`
-  height: 1.5rem;
-  width: 1.5rem;
+  height: ${({ theme }) => TOGGLE_BG_HEIGHT_DEFAULT / (theme as ProjectTheme).rootFontSize.default}rem;
+  width: ${({ theme }) => TOGGLE_BG_HEIGHT_DEFAULT / (theme as ProjectTheme).rootFontSize.default}rem;
+  @media (max-width: ${({ theme }) => (theme as ProjectTheme).breakPoints.minWidthTablet - 1}px) {
+    height: ${({ theme }) => TOGGLE_BG_HEIGHT_MOBILE / (theme as ProjectTheme).rootFontSize.mobile}rem;
+    width: ${({ theme }) => TOGGLE_BG_HEIGHT_MOBILE / (theme as ProjectTheme).rootFontSize.mobile}rem;
+  }
   svg {
-    height: 1.5rem;
-    width: 1.5rem;
+    height: ${({ theme }) => TOGGLE_BG_HEIGHT_DEFAULT / (theme as ProjectTheme).rootFontSize.default}rem;
+    width: ${({ theme }) => TOGGLE_BG_HEIGHT_DEFAULT / (theme as ProjectTheme).rootFontSize.default}rem;
+    @media (max-width: ${({ theme }) => (theme as ProjectTheme).breakPoints.minWidthTablet - 1}px) {
+      height: ${({ theme }) => TOGGLE_BG_HEIGHT_MOBILE / (theme as ProjectTheme).rootFontSize.mobile}rem;
+      width: ${({ theme }) => TOGGLE_BG_HEIGHT_MOBILE / (theme as ProjectTheme).rootFontSize.mobile}rem;
+    }
     path {
       fill: ${({ $colorScheme, theme }) => (theme as ProjectTheme).colors.iconPrimary[$colorScheme]};
     }
