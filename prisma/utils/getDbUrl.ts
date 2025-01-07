@@ -14,14 +14,14 @@ interface DbCredentials {
 
 export async function getDbUrl(): Promise<string> {
   try {
-    const awsRegion = process.env.AWS_REGION;
+    const region = process.env.REGION;
     const dbSecretName = process.env.DB_SECRETS_NAME;
     const host = process.env.DB_HOST;
     const port = process.env.DB_PORT;
     const database = process.env.DB_NAME;
-    if (!awsRegion || !dbSecretName || !host || !port || !database) {
+    if (!region || !dbSecretName || !host || !port || !database) {
       throw new Error(`Missing environment variables: ${JSON.stringify({
-        awsRegion,
+        awsRegion: region,
         dbSecretName,
         host,
         port,
@@ -30,7 +30,7 @@ export async function getDbUrl(): Promise<string> {
     }
   
     const client = new SecretsManagerClient({
-      region: awsRegion,
+      region,
     });
     
     const response = await client.send(
