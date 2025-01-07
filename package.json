@@ -10,9 +10,11 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test": "vitest --ui",
-    "test:ci": "vitest run"
+    "test:ci": "vitest run",
+    "prisma:generate": "ts-node prisma/utils/generatePrismaClient.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.723.0",
     "aws-amplify": "^6.9.0",
     "next": "14.2.17",
     "portfolio-prisma": "file:prisma",
