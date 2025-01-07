@@ -46,8 +46,20 @@ export async function getDbUrl(): Promise<string> {
 
     const credentials: DbCredentials = JSON.parse(response.SecretString);
     
-    // Construct the database URL with encoded password
-    const dbUrl = `postgresql://${credentials.username}:${encodeURIComponent(credentials.password)}@${host}:${port}/${database}`;
+    // Additional encoding for characters that encodeURIComponent doesn't handle
+    const encodePassword = (password: string) => {
+      return encodeURIComponent(password)
+        .replace(/\./g, '%2E')
+        .replace(/\*/g, '%2A')
+        .replace(/\)/g, '%29')
+        .replace(/\(/g, '%28')
+        .replace(/!/g, '%21')
+        .replace(/'/g, '%27')
+        .replace(/~/g, '%7E');
+    };
+    
+    // Construct the database URL with fully encoded password
+    const dbUrl = `postgresql://${credentials.username}:${encodePassword(credentials.password)}@${host}:${port}/${database}`;
     
     return dbUrl;
   } catch (error) {
