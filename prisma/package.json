@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "node_modules/.prisma/client",
   "scripts": {
-    "prisma:generate": "ts-node prisma/utils/generatePrismaClient.ts"
+    "prisma:generate": "ts-node utils/generatePrismaClient.ts"
   },
   "author": "",
   "license": "ISC",
