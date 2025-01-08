@@ -8,7 +8,9 @@ export const handler = async (event: any) => {
     console.log('dbUrl', dbUrl);
     prisma = new PrismaClient({
       datasources: {
-        url: dbUrl,
+        db: {
+          url: dbUrl,
+        },
       },
     });
     
