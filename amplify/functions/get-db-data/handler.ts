@@ -16,7 +16,8 @@ export const handler = async (event: any) => {
     
     // Use prisma client as normal
     const configs = await prisma.config.findMany();
-    
+    prisma.$disconnect();
+
     return {
       statusCode: 200,
       body: JSON.stringify(configs),
@@ -27,7 +28,5 @@ export const handler = async (event: any) => {
       statusCode: 500,
       body: JSON.stringify({ message: 'Internal server error' }),
     };
-  } finally {
-    prisma.$disconnect();
   }
 };
