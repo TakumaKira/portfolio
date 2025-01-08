@@ -1,10 +1,31 @@
-import type { Schema } from "../../data/resource"
-import { PrismaClient } from "portfolio-prisma"
+import { PrismaClient } from 'portfolio-prisma';
+import { getDbUrl } from './getDbUrl';
 
-const prisma = new PrismaClient()
-
-export const handler: Schema["getDbData"]["functionHandler"] = async (event) => {
-  const configRaw = await prisma.config.findMany()
-  const config = Object.fromEntries(configRaw.map(({ name, value }) => [name, value]))
-  return { config }
-}
+export const handler = async (event: any) => {
+  let prisma: PrismaClient;
+  try {
+    const dbUrl = await getDbUrl();
+    console.log('dbUrl', dbUrl);
+    prisma = new PrismaClient({
+      datasource: {
+        url: dbUrl,
+      },
+    });
+    
+    // Use prisma client as normal
+    const configs = await prisma.config.findMany();
+    
+    return {
+      statusCode: 200,
+      body: JSON.stringify(configs),
+    };
+  } catch (error) {
+    console.error('Database error:', error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ message: 'Internal server error' }),
+    };
+  } finally {
+    prisma.$disconnect();
+  }
+};

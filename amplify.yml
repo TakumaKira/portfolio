@@ -7,7 +7,7 @@ backend:
         # Deploy prisma layer as a lambda layer
         - cd prisma
         - npm ci --cache .npm --prefer-offline
-        - npx prisma && npm run prisma:generate
+        - npx prisma && npx prisma generate
         - cd ..
         - mkdir -p nodejs/node_modules/portfolio-prisma
         - cp -r prisma/* nodejs/node_modules/portfolio-prisma/
@@ -23,7 +23,7 @@ frontend:
         # Generate prisma client
         - cd prisma
         - npm ci --cache .npm --prefer-offline
-        - npx prisma && npm run prisma:generate
+        - npx prisma && npx prisma generate
         - cd ..
         # Install frontend dependencies
         - npm install
