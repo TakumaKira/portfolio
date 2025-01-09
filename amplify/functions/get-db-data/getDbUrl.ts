@@ -48,16 +48,14 @@ export async function getDbUrl(): Promise<string> {
 
     const credentials: DbCredentials = JSON.parse(response.SecretString);
     
-    // Additional encoding for characters that encodeURIComponent doesn't handle
     const encodePassword = (password: string) => {
       return encodeURIComponent(password)
-        .replace(/\./g, '%2E')
+        // encodeURIComponent doesn't encode these characters
         .replace(/\*/g, '%2A')
         .replace(/\)/g, '%29')
         .replace(/\(/g, '%28')
         .replace(/!/g, '%21')
-        .replace(/'/g, '%27')
-        .replace(/~/g, '%7E');
+        .replace(/'/g, '%27');
     };
     
     // Construct the database URL with fully encoded password
