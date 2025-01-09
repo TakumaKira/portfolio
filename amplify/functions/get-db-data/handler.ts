@@ -6,7 +6,6 @@ export const handler: Schema["getDbData"]["functionHandler"] = async (event: any
   let prisma: PrismaClient;
   try {
     const dbUrl = await getDbUrl();
-    console.log('dbUrl', dbUrl);
     prisma = new PrismaClient({
       datasources: {
         db: {
