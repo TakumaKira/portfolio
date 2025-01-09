@@ -33,12 +33,14 @@ export async function getDbUrl(): Promise<string> {
       region,
     });
     
+    console.log('Getting secret from AWS Secrets Manager');
     const response = await client.send(
       new GetSecretValueCommand({
         SecretId: dbSecretName,
         VersionStage: "AWSCURRENT", // VersionStage defaults to AWSCURRENT if unspecified
       })
     );
+    console.log('Secret retrieved from AWS Secrets Manager');
 
     if (!response.SecretString) {
       throw new Error('Secret string is empty');
