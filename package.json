@@ -10,8 +10,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test": "vitest --ui",
-    "test:ci": "vitest run",
-    "prisma:generate": "ts-node prisma/utils/generatePrismaClient.ts"
+    "test:ci": "vitest run"
   },
   "dependencies": {
     "@aws-sdk/client-secrets-manager": "^3.723.0",
@@ -52,7 +51,6 @@
     "jsdom": "^25.0.1",
     "sass": "^1.80.6",
     "storybook": "^8.4.2",
-    "ts-node": "^10.9.2",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3",
     "vitest": "^2.1.5"

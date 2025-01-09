@@ -16,8 +16,9 @@ export const handler: Schema["getDbData"]["functionHandler"] = async (event: any
     });
     
     const configRaw = await prisma.config.findMany()
-    const config = Object.fromEntries(configRaw.map(({ name, value }) => [name, value]))
     prisma.$disconnect();
+
+    const config = Object.fromEntries(configRaw.map(({ name, value }) => [name, value]))
     return { config }
   } catch (error) {
     throw new Error('Database error: ' + error);

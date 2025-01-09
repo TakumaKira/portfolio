@@ -3,18 +3,12 @@
   "version": "1.0.0",
   "main": "node_modules/.prisma/client",
   "scripts": {
-    "prisma:generate": "ts-node utils/generatePrismaClient.ts"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@aws-sdk/client-secrets-manager": "^3.723.0",
     "@prisma/client": "^5.22.0"
-  },
-  "devDependencies": {
-    "@types/node": "^22.10.5",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.7.2"
   }
 }
