@@ -34,6 +34,7 @@ export async function getDbUrl(): Promise<string> {
     });
     
     console.log('Getting secret from AWS Secrets Manager');
+    // This operation could cause a timeout when this Lambda function is placed in a VPC but not configured to get access to Secrets Manager(e.g. via a VPC endpoint)
     const response = await client.send(
       new GetSecretValueCommand({
         SecretId: dbSecretName,
@@ -48,6 +49,7 @@ export async function getDbUrl(): Promise<string> {
 
     const credentials: DbCredentials = JSON.parse(response.SecretString);
     
+    // Percent encode only the password to satisfy the RFC 3986 specification (Prisma requires this)
     const encodePassword = (password: string) => {
       return encodeURIComponent(password)
         // encodeURIComponent doesn't encode these characters
