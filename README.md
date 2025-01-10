@@ -59,7 +59,7 @@ CREATE DATABASE portfolio;
 Migrate the schema to the postgres database using prisma cli.
 
 ```bash
-CONFIG_DATABASE_URL=postgresql://<your-database-user>:<your-database-user-password>@localhost:5432/portfolio npx prisma migrate deploy
+DATABASE_URL=postgresql://<your-database-user>:<your-database-user-password>@localhost:5432/portfolio npx prisma migrate deploy
 ```
 
 Notice you need to encode `<your-database-user-password>` with percent encoding to escape special characters in the password string.
@@ -98,13 +98,17 @@ PRISMA_LAMBDA_LAYER_ARN: arn:aws:lambda:<your-resource-region>:<your-aws-account
 For the backend Lambda function, add:
 
 ```text
-CONFIG_DATABASE_URL: postgresql://<your-database-user>:<your-database-user-password>@localhost:5432/portfolio
+REGION: <your-aws-region>
+DB_SECRETS_NAME: <your-aws-database-secret-name-on-secrets-manager>
+DB_HOST: <your-rds-database-host>
+DB_PORT: <your-rds-database-port>
+DB_NAME: <your-database-name>
 PRISMA_QUERY_ENGINE_LIBRARY: /opt/nodejs/node_modules/portfolio-prisma/node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node
 ```
 
-Notice you need to encode `<your-database-user-password>` with percent encoding to escape special characters in the password string.
-
 And you'd better use `RDS database connections` configuration on the Lambda function to grant appropriate security group to the function and the database. This would resolve database connection timeout if happened.
+
+And you need to create a VPC endpoint for the Lambda function to access the Secrets Manager, otherwise the Lambda function will timeout when trying to get the secret from the Secrets Manager.
 
 Finally, you should be able to access the working web app on the deployed URL as expected.
 
@@ -123,10 +127,14 @@ PRISMA_LAMBDA_LAYER_ARN=arn:aws:lambda:<your-resource-region>:<your-aws-account-
 Notice you also need to add some environment variables for the sandbox Lambda function.
 
 ```text
-CONFIG_DATABASE_URL: postgresql://<your-database-user>:<your-database-user-password>@localhost:5432/portfolio
+REGION: <your-aws-region>
+DB_SECRETS_NAME: <your-aws-database-secret-name-on-secrets-manager>
+DB_HOST: <your-rds-database-host>
+DB_PORT: <your-rds-database-port>
+DB_NAME: <your-database-name>
 PRISMA_QUERY_ENGINE_LIBRARY: /opt/nodejs/node_modules/portfolio-prisma/node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node
 ```
 
-Notice you need to encode `<your-database-user-password>` with percent encoding to escape special characters in the password string.
-
 And you'd better use `RDS database connections` configuration on the Lambda function to grant appropriate security group to the function and the database. This would resolve database connection timeout if happened.
+
+And you need to create a VPC endpoint for the Lambda function to access the Secrets Manager, otherwise the Lambda function will timeout when trying to get the secret from the Secrets Manager.
