@@ -13,6 +13,7 @@
     "test:ci": "vitest run"
   },
   "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.723.0",
     "aws-amplify": "^6.9.0",
     "next": "14.2.17",
     "portfolio-prisma": "file:prisma",
