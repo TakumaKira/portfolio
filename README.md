@@ -108,7 +108,7 @@ PRISMA_QUERY_ENGINE_LIBRARY: /opt/nodejs/node_modules/portfolio-prisma/node_modu
 
 And you'd better use `RDS database connections` configuration on the Lambda function to grant appropriate security group to the function and the database. This would resolve database connection timeout if happened.
 
-And you need to create a VPC endpoint for the Lambda function to access the Secrets Manager, otherwise the Lambda function will timeout when trying to get the secret from the Secrets Manager.
+And you need to place the function in the subnet with a NAT gateway or create a VPC endpoint for the Lambda function to allow access to the Secrets Manager, otherwise the Lambda function will timeout when trying to get the secret from the Secrets Manager.
 
 Finally, you should be able to access the working web app on the deployed URL as expected.
 
