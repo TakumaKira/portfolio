@@ -4,8 +4,6 @@ backend:
     build:
       commands:
         - echo "Using amplify.yml on repository root"
-        # Install jq for JSON parsing
-        - yum install -y jq
         # Deploy prisma layer as a lambda layer
         - cd prisma
         - npm ci --cache .npm --prefer-offline
@@ -21,8 +19,8 @@ backend:
         - rm nodejs/node_modules/portfolio-prisma/node_modules/.prisma/client/query_engine_bg.wasm
         - zip -r portfolio-prisma.zip nodejs
         - LAYER_OUTPUT=$(aws lambda publish-layer-version --layer-name portfolio-prisma --zip-file fileb://portfolio-prisma.zip)
-        - LAYER_VERSION=$(echo $LAYER_OUTPUT | jq -r '.Version')
-        - LAYER_ARN=$(echo $LAYER_OUTPUT | jq -r '.LayerVersionArn')
+        - LAYER_VERSION=$(echo $LAYER_OUTPUT | grep -o '"Version": *[0-9]*' | grep -o '[0-9]*')
+        - LAYER_ARN=$(echo $LAYER_OUTPUT | grep -o '"LayerVersionArn": *"[^"]*' | cut -d'"' -f4)
         - echo "Published Lambda Layer version $LAYER_VERSION with ARN $LAYER_ARN"
         - export PRISMA_LAMBDA_LAYER_ARN=$LAYER_ARN
         # Deploy backend
