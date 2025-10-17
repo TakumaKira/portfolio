@@ -68,6 +68,66 @@ INSERT INTO "public"."Config" ("id", "name", "type", "value") VALUES
 
 Now, your database is ready and you can close the VPC tunnel.
 
+## Updating Prisma Version
+
+When updating Prisma to a new version, follow these steps carefully to avoid version conflicts:
+
+### 1. Update Prisma packages in the prisma directory
+
+```bash
+cd prisma
+npm install prisma@<new-version> @prisma/client@<new-version>
+```
+
+### 2. Update package.json to use exact versions
+
+Ensure `prisma/package.json` uses exact versions (not ranges like `^6.0.0`) to match the lock file:
+
+```json
+{
+  "dependencies": {
+    "@prisma/client": "6.17.1"
+  },
+  "devDependencies": {
+    "prisma": "6.17.1"
+  }
+}
+```
+
+### 3. Regenerate the root package-lock.json
+
+The root project depends on the prisma directory via `"portfolio-prisma": "file:prisma"`. You must regenerate the root lock file to reflect the updated Prisma versions:
+
+```bash
+cd .. # Back to project root
+rm package-lock.json
+npm install
+```
+
+### 4. Test locally
+
+Verify the setup works locally:
+
+```bash
+cd prisma
+npm ci # Should work without version conflicts
+npx prisma generate
+```
+
+### 5. Commit all changes
+
+Commit both the prisma directory changes and the regenerated root `package-lock.json`:
+
+```bash
+git add prisma/package.json prisma/package-lock.json package-lock.json
+git commit -m "feat: upgrade Prisma to version X.X.X"
+```
+
+**Important Notes:**
+- Always use exact versions in `prisma/package.json` to prevent `npm ci` sync errors in Amplify builds
+- The root `package-lock.json` must be regenerated whenever Prisma versions change
+- Amplify caching is disabled to prevent stale version conflicts during builds
+
 ### Deploy to Amplify
 
 Create a new Ampify project and connect this repository.
