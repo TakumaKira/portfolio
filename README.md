@@ -8,27 +8,14 @@ This project uses postgres database. By getting some config data from the databa
 
 I use npm as package manager for this project, because it works well in any case including CIs.
 
-### Install prisma cli
+### Install Prisma and generate types
 
-I use [Prisma](https://www.prisma.io) to manage the database schema and migrations. So you need to install prisma cli to run some commands.
+I use [Prisma](https://www.prisma.io) to manage the database schema and migrations. You need to install dependencies and generate types to correctly reference schema types in your IDE.
 
 ```bash
 cd prisma # Go into the prisma layer directory
-npx prisma
-```
-
-### Generate types for prisma client
-
-You need to generate types using prisma cli to correctly reference types of schema in your IDE. First, you need to install dependencies for the prisma layer.
-
-```bash
-npm install
-```
-
-Then, run generate command.
-
-```bash
-npx prisma generate
+npm install # Installs Prisma 6 and @prisma/client
+npx prisma generate # Generates Prisma Client with types
 ```
 
 ### Install dependencies for the project
@@ -87,28 +74,24 @@ Create a new Ampify project and connect this repository.
 
 It will trigger deployment configured with `/amplify.yml`. It includes deployment of the prisma layer as a Lambda layer, which is also required to run sandbox you can use in the future step.
 
-When the first deployment has done successfully, you need to add some environment variables onto the Amplify project and the backend Lambda function deployed in the `backend` step of `/amplify.yml`.
+When the first deployment has done successfully, you need to add environment variables to the Amplify project. Navigate to: Amplify Console → App Settings → Environment Variables
 
-For the Amplify project, add the following on the page:
-
-```text
-PRISMA_LAMBDA_LAYER_ARN: arn:aws:lambda:<your-resource-region>:<your-aws-account-number>:layer:portfolio-prisma:<latest-lambda-layer-version-number>
-```
-
-For the backend Lambda function, add:
+Add the following variables (one-time setup):
 
 ```text
-REGION: <your-aws-region>
 DB_SECRETS_NAME: <your-aws-database-secret-name-on-secrets-manager>
 DB_HOST: <your-rds-database-host>
 DB_PORT: <your-rds-database-port>
 DB_NAME: <your-database-name>
-PRISMA_QUERY_ENGINE_LIBRARY: /opt/nodejs/node_modules/portfolio-prisma/node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node
+VPC_SUBNET_IDS: <subnet-id-1>,<subnet-id-2>
+VPC_SECURITY_GROUP_IDS: <security-group-id>
 ```
 
-And you'd better use `RDS database connections` configuration on the Lambda function to grant appropriate security group to the function and the database. This would resolve database connection timeout if happened.
+**Note**: `AWS_REGION` and `PRISMA_LAMBDA_LAYER_ARN` are automatically available in Amplify build environment. The Lambda Layer ARN is automatically captured from the `publish-layer-version` command during deployment.
 
-And you need to place the function in the subnet with a NAT gateway or create a VPC endpoint for the Lambda function to allow access to the Secrets Manager, otherwise the Lambda function will timeout when trying to get the secret from the Secrets Manager.
+These environment variables will be automatically passed to the Lambda function via the Amplify backend configuration. No manual Lambda configuration is needed after deployment.
+
+**Important**: Ensure the VPC subnets have a NAT gateway or create a VPC endpoint for Secrets Manager access, otherwise the Lambda function will timeout when trying to get the secret from Secrets Manager.
 
 Finally, you should be able to access the working web app on the deployed URL as expected.
 
@@ -120,21 +103,25 @@ npm run dev
 
 ### Run Amplify backend functions sandbox for development
 
+First, ensure you have the latest Lambda Layer deployed (this uses the same layer as your production deployment):
+
 ```bash
-PRISMA_LAMBDA_LAYER_ARN=arn:aws:lambda:<your-resource-region>:<your-aws-account-number>:layer:portfolio-prisma:<latest-lambda-layer-version-number> npx ampx sandbox
+export PRISMA_LAMBDA_LAYER_ARN=$(aws lambda list-layer-versions --layer-name portfolio-prisma --query 'LayerVersions[0].LayerVersionArn' --output text)
 ```
 
-Notice you also need to add some environment variables for the sandbox Lambda function.
+Then set the remaining environment variables and run the sandbox:
 
-```text
-REGION: <your-aws-region>
-DB_SECRETS_NAME: <your-aws-database-secret-name-on-secrets-manager>
-DB_HOST: <your-rds-database-host>
-DB_PORT: <your-rds-database-port>
-DB_NAME: <your-database-name>
-PRISMA_QUERY_ENGINE_LIBRARY: /opt/nodejs/node_modules/portfolio-prisma/node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node
+```bash
+export DB_SECRETS_NAME=<your-aws-database-secret-name-on-secrets-manager>
+export DB_HOST=<your-rds-database-host>
+export DB_PORT=<your-rds-database-port>
+export DB_NAME=<your-database-name>
+export VPC_SUBNET_IDS=<subnet-id-1>,<subnet-id-2>
+export VPC_SECURITY_GROUP_IDS=<security-group-id>
+
+npx ampx sandbox
 ```
 
-And you'd better use `RDS database connections` configuration on the Lambda function to grant appropriate security group to the function and the database. This would resolve database connection timeout if happened.
+**Note**: The sandbox uses the existing Lambda Layer published by your last Amplify deployment. If you've made changes to the Prisma schema, you'll need to trigger an Amplify deployment first to publish a new layer version, or manually publish the layer. `AWS_REGION` is automatically available from your AWS CLI configuration.
 
-And you need to create a VPC endpoint for the Lambda function to access the Secrets Manager, otherwise the Lambda function will timeout when trying to get the secret from the Secrets Manager.
+The sandbox Lambda function will be automatically configured with VPC settings and IAM permissions via the Amplify backend configuration. After deployment, you may need to manually configure the sandbox Lambda function with "RDS database connections" for initial setup, or ensure it has the correct VPC configuration and security groups.
