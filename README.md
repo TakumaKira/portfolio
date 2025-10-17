@@ -101,6 +101,59 @@ Finally, you should be able to access the working web app on the deployed URL as
 npm run dev
 ```
 
+## Backend Deployment Methods
+
+This project has two ways to deploy/test the Amplify backend:
+
+### 1. Amplify Hosted Deployment (via Branch Connection)
+
+**When to use:**
+- ✅ Testing changes that affect Lambda Layer (Prisma version upgrades, schema changes)
+- ✅ Testing the complete CI/CD pipeline defined in `amplify.yml`
+- ✅ Creating staging/production environments
+- ✅ When you need a publicly accessible URL for testing
+
+**How it works:**
+- Connects a git branch to Amplify Console
+- Runs the full `amplify.yml` build process including:
+  - Publishing new Lambda Layer with Prisma client
+  - Automatically capturing the Layer ARN
+  - Deploying backend with the new layer
+- Creates isolated environment per branch
+- Provides a deployed frontend URL
+
+**Setup:**
+1. Connect branch in Amplify Console
+2. Set environment variables for the branch (one-time):
+   ```
+   DB_SECRETS_NAME, DB_HOST, DB_PORT, DB_NAME,
+   VPC_SUBNET_IDS, VPC_SECURITY_GROUP_IDS
+   ```
+3. Trigger deployment (automatic on git push)
+
+**Note**: `AWS_REGION` and `PRISMA_LAMBDA_LAYER_ARN` are automatically available.
+
+### 2. Sandbox (Local Development)
+
+**When to use:**
+- ✅ Rapid iteration on backend logic (Lambda function code changes)
+- ✅ Testing API/GraphQL schema changes
+- ✅ Local frontend development with real AWS backend
+
+**When NOT to use:**
+- ❌ Testing Lambda Layer changes (Prisma upgrades, new dependencies)
+- ❌ Testing `amplify.yml` build process changes
+- ❌ Initial setup or major infrastructure changes
+
+**How it works:**
+- Runs `npx ampx sandbox` from your local machine
+- Deploys backend resources to AWS (NOT local emulation)
+- Uses EXISTING Lambda Layer (doesn't publish new ones)
+- Watches for code changes and hot-reloads
+- Does NOT run `amplify.yml` build commands
+
+**Important limitation**: Sandbox does not publish Lambda Layers. It uses the most recently published layer from an Amplify hosted deployment. If you upgrade Prisma or change the layer contents, you must first deploy via Amplify hosted deployment to publish the new layer.
+
 ### Run Amplify backend functions sandbox for development
 
 First, ensure you have the latest Lambda Layer deployed (this uses the same layer as your production deployment):
