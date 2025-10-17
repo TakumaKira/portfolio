@@ -10,7 +10,11 @@ backend:
         - npx prisma generate
         - cd ..
         - mkdir -p nodejs/node_modules/portfolio-prisma
-        - cp -r prisma/* nodejs/node_modules/portfolio-prisma/
+        - cp prisma/package.json nodejs/node_modules/portfolio-prisma/
+        - cp prisma/package-lock.json nodejs/node_modules/portfolio-prisma/
+        - cp -r prisma/prisma nodejs/node_modules/portfolio-prisma/
+        - cp -r prisma/node_modules/@prisma nodejs/node_modules/portfolio-prisma/node_modules/
+        - cp -r prisma/node_modules/.prisma nodejs/node_modules/portfolio-prisma/node_modules/
         - zip -r portfolio-prisma.zip nodejs
         - LAYER_OUTPUT=$(aws lambda publish-layer-version --layer-name portfolio-prisma --zip-file fileb://portfolio-prisma.zip)
         - LAYER_VERSION=$(echo $LAYER_OUTPUT | jq -r '.Version')
