@@ -32,6 +32,8 @@ Upgrade to Prisma 6 with proper Node 20/22 support and add the CLI as a devDepen
 1. Update binary target for Lambda Node 20/22 compatibility
 2. Add `prisma` CLI to devDependencies
 3. Remove redundant `npx prisma` commands
+4. Configure Lambda environment variables in Amplify function definition
+5. Add VPC configuration and IAM policies via CDK escape hatch
 
 ## Changes to Make
 
@@ -93,16 +95,123 @@ Upgrade to Prisma 6 with proper Node 20/22 support and add the CLI as a devDepen
 - `npx prisma` without arguments just prints help text (redundant)
 - `npx prisma generate` is the only command needed
 
+### 4. amplify/functions/get-db-data/resource.ts
+
+```diff
+ import { defineFunction } from '@aws-amplify/backend';
+
+ const prismaLambdaLayerArn = process.env.PRISMA_LAMBDA_LAYER_ARN
+ if (!prismaLambdaLayerArn) {
+   throw new Error("PRISMA_LAMBDA_LAYER_ARN is not set")
+ }
+
+ export const getDbData = defineFunction({
+   name: 'get-db-data',
+   layers: {
+     "portfolio-prisma": prismaLambdaLayerArn
+   },
++  environment: {
++    REGION: process.env.AWS_REGION || '',
++    DB_SECRETS_NAME: process.env.DB_SECRETS_NAME || '',
++    DB_HOST: process.env.DB_HOST || '',
++    DB_PORT: process.env.DB_PORT || '',
++    DB_NAME: process.env.DB_NAME || '',
++    PRISMA_QUERY_ENGINE_LIBRARY: '/opt/nodejs/node_modules/portfolio-prisma/node_modules/.prisma/client/libquery_engine-rhel-openssl-3.0.x.so.node',
++  },
++  timeoutSeconds: 30,
++  memoryMB: 512,
+ })
+```
+
+**Rationale:**
+- Environment variables from Amplify Console must be explicitly passed to Lambda via `environment` property
+- `PRISMA_QUERY_ENGINE_LIBRARY` is hardcoded (stable path, only changes with Prisma major updates)
+- Database connection settings are configurable via Amplify Console
+- Increased timeout from default 3s to 30s for database operations
+- Increased memory from default 128MB to 512MB for better performance
+
+### 5. amplify/backend.ts
+
+```diff
+ import { defineBackend } from '@aws-amplify/backend';
+ import { getDbData } from './functions/get-db-data/resource';
+ import { auth } from './auth/resource';
+ import { data } from './data/resource';
++import * as iam from 'aws-cdk-lib/aws-iam';
+
+-/**
+- * @see https://docs.amplify.aws/react/build-a-backend/ to add storage, functions, and more
+- */
+-defineBackend({
++const backend = defineBackend({
+   getDbData,
+   auth,
+   data,
+ });
++
++// Configure VPC settings for Lambda function
++const subnetIds = process.env.VPC_SUBNET_IDS?.split(',') || [];
++const securityGroupIds = process.env.VPC_SECURITY_GROUP_IDS?.split(',') || [];
++
++if (subnetIds.length > 0 && securityGroupIds.length > 0) {
++  // Add VPC execution role
++  backend.getDbData.resources.lambda.role?.addManagedPolicy(
++    iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaVPCAccessExecutionRole')
++  );
++
++  // Add Secrets Manager access policy
++  backend.getDbData.resources.lambda.role?.addToPolicy(
++    new iam.PolicyStatement({
++      effect: iam.Effect.ALLOW,
++      actions: ['secretsmanager:GetSecretValue'],
++      resources: [`arn:aws:secretsmanager:${process.env.AWS_REGION}:*:secret:${process.env.DB_SECRETS_NAME}*`],
++    })
++  );
++
++  // Configure VPC settings via CFN resource
++  backend.getDbData.resources.cfnResources.cfnFunction.vpcConfig = {
++    subnetIds,
++    securityGroupIds,
++  };
++}
+```
+
+**Rationale:**
+- Uses CDK escape hatch to configure VPC (workaround until Amplify adds native support)
+- Automatically adds VPC execution role for Lambda
+- Grants Secrets Manager access permissions
+- Eliminates manual Lambda configuration after each deployment
+
 ## Implementation Steps
 
+### Phase 1: Upgrade Prisma and Node Version
 1. [ ] Update `prisma/package.json` with new versions and CLI dependency
-2. [ ] Update `prisma/prisma/schema.prisma` binary target
+2. [ ] Update `prisma/prisma/schema.prisma` binary target (already correct)
 3. [ ] Update `amplify.yml` to remove redundant commands
 4. [ ] Run `npm install` in `prisma/` directory locally
 5. [ ] Run `npx prisma generate` locally to verify
 6. [ ] Test locally with Node 20/22
 7. [ ] Commit changes
 8. [ ] Deploy to Amplify and verify build succeeds
+
+### Phase 2: Automate Lambda Configuration (Eliminate Manual Setup)
+9. [ ] Update `amplify/functions/get-db-data/resource.ts` to configure Lambda environment variables
+10. [ ] Update `amplify/backend.ts` to add VPC configuration and IAM policies
+11. [ ] Set environment variables in Amplify Console (one-time setup):
+    - Navigate to: Amplify Console → App Settings → Environment Variables
+    - Add the following variables:
+      - `PRISMA_LAMBDA_LAYER_ARN`: arn:aws:lambda:\<region\>:\<account\>:layer:portfolio-prisma:\<version\>
+      - `DB_SECRETS_NAME`: \<your-secrets-manager-secret-name\>
+      - `DB_HOST`: \<your-rds-endpoint\>
+      - `DB_PORT`: 5432
+      - `DB_NAME`: portfolio
+      - `VPC_SUBNET_IDS`: \<subnet-id-1\>,\<subnet-id-2\>
+      - `VPC_SECURITY_GROUP_IDS`: \<security-group-id\>
+    - Note: `AWS_REGION` is automatically available in Amplify build environment
+    - Note: `PRISMA_QUERY_ENGINE_LIBRARY` is hardcoded in the function definition
+    - These will be passed to Lambda via the function definition
+12. [ ] Commit changes
+13. [ ] Deploy to Amplify and verify build succeeds (no manual Lambda config needed!)
 
 ## Post-Upgrade Verification
 
