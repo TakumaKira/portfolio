@@ -6,7 +6,7 @@ backend:
         - echo "Using amplify.yml on repository root"
         # Deploy prisma layer as a lambda layer
         - cd prisma
-        - npm ci --include=optional
+        - npm ci
         - npx prisma generate
         - cd ..
         - mkdir -p nodejs/node_modules/portfolio-prisma/node_modules/.prisma/client
@@ -33,7 +33,7 @@ frontend:
       commands:
         # Generate prisma client
         - cd prisma
-        - npm ci --include=optional
+        - npm ci
         - npx prisma generate
         - cd ..
         # Install frontend dependencies
