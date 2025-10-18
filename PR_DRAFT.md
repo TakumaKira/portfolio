@@ -1,3 +1,7 @@
+**I'll leave this fix as I don't want to keep using this portfolio.**
+
+When trying to update I encountered so many errors and I don't prioritize to keep this project alive as I want to change my strategy right now.
+
 # Pull Request Draft
 
 **Target Branch:** `topic/update-for-lambda-node-update`
