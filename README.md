@@ -87,9 +87,6 @@ Ensure `prisma/package.json` uses exact versions (not ranges like `^6.0.0`) to m
 {
   "dependencies": {
     "@prisma/client": "6.17.1"
-  },
-  "devDependencies": {
-    "prisma": "6.17.1"
   }
 }
 ```
