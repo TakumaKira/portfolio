@@ -9,14 +9,8 @@ backend:
         - npm ci
         - npx prisma generate
         - cd ..
-        - mkdir -p nodejs/node_modules/portfolio-prisma/node_modules/.prisma/client
-        - cp prisma/package.json nodejs/node_modules/portfolio-prisma/
-        - cp prisma/package-lock.json nodejs/node_modules/portfolio-prisma/
-        - cp -r prisma/prisma nodejs/node_modules/portfolio-prisma/
-        # Copy only the generated Prisma client (not the entire @prisma packages)
-        - cp -r prisma/node_modules/.prisma/client/* nodejs/node_modules/portfolio-prisma/node_modules/.prisma/client/
-        # Remove unnecessary WASM files and binaries for other platforms (keep only rhel-openssl-3.0.x for Lambda)
-        - rm nodejs/node_modules/portfolio-prisma/node_modules/.prisma/client/query_engine_bg.wasm
+        - mkdir -p nodejs/node_modules/portfolio-prisma/
+        - cp -r prisma/ nodejs/node_modules/portfolio-prisma/
         - zip -r portfolio-prisma.zip nodejs
         - LAYER_OUTPUT=$(aws lambda publish-layer-version --layer-name portfolio-prisma --zip-file fileb://portfolio-prisma.zip)
         - 'LAYER_VERSION=$(echo $LAYER_OUTPUT | grep -o "\"Version\": *[0-9]*" | grep -o "[0-9]*")'
