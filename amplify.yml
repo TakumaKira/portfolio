@@ -31,7 +31,7 @@ frontend:
         - npx prisma generate
         - cd ..
         # Install frontend dependencies
-        - npm install
+        - npm ci
     test:
       commands:
         - npm run test:ci
